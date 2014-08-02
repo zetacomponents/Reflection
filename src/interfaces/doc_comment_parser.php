@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,13 +32,13 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
-interface ezcReflectionDocCommentParser {
-
+interface ezcReflectionDocCommentParser
+{
     /**
      * Initialize parsing of the given documentation fragment.
      * Results can be retrieved after completion by the getters provided.
      *
-     * @param string $docComment
+     * @param  string $docComment
      * @return void
      */
     public function parse($docComment);
@@ -46,7 +46,7 @@ interface ezcReflectionDocCommentParser {
     /**
      * Return all found annotations with the given name.
      *
-     * @param string $name
+     * @param  string                    $name
      * @return ezcReflectionAnnotation[]
      */
     public function getAnnotationsByName($name);
@@ -99,4 +99,3 @@ interface ezcReflectionDocCommentParser {
      */
     public function getLongDescription();
 }
-?>

@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -50,15 +50,14 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Constructs a new ezcReflectionClass object.
      *
-     * @param string|object|ReflectionClass $argument
-     *        Name, instance or ReflectionClass object of the class to be
-     *        reflected
-     * @throws ReflectionException if the specified class doesn't exist
+     * @param  string|object|ReflectionClass $argument
+     *                                                 Name, instance or ReflectionClass object of the class to be
+     *                                                 reflected
+     * @throws ReflectionException           if the specified class doesn't exist
      */
-    public function __construct( $argument )
+    public function __construct($argument)
     {
-        if ( !$argument instanceof parent )
-        {
+        if (!$argument instanceof parent) {
             parent::__construct( $argument );
         }
         $this->reflectionSource = $argument;
@@ -71,21 +70,19 @@ class ezcReflectionClass extends ReflectionClass
      * Use overloading to call additional methods
      * of the ReflectionClass instance given to the constructor.
      *
-     * @param string $method Method to be called
-     * @param array  $arguments Arguments that were passed
+     * @param  string $method    Method to be called
+     * @param  array  $arguments Arguments that were passed
      * @return mixed
      */
-    public function __call( $method, $arguments )
+    public function __call($method, $arguments)
     {
-        $callback = array( $this->reflectionSource, $method );  
+        $callback = array( $this->reflectionSource, $method );
         if ( $this->reflectionSource instanceof parent
              and is_callable( $callback ) )
         {
             // query external reflection object
             return call_user_func_array( $callback, $arguments );
-        }
-        else
-        {
+        } else {
             throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
         }
     }
@@ -97,12 +94,13 @@ class ezcReflectionClass extends ReflectionClass
      *
      * This method is part of the dependency injection mechanism and serves as
      * a helper for implementing wrapper methods without code duplication.
-     * @param string $method Name of the method to be invoked
-     * @param mixed[] $arguments Arguments to be passed to the method
-     * @return mixed Return value of the invoked method
+     * @param  string  $method    Name of the method to be invoked
+     * @param  mixed[] $arguments Arguments to be passed to the method
+     * @return mixed   Return value of the invoked method
      */
-    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
-        if ( $this->reflectionSource instanceof parent ) {
+    protected function forwardCallToReflectionSource( $method, $arguments = array() )
+    {
+        if ($this->reflectionSource instanceof parent) {
             return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
         } else {
             //*
@@ -113,6 +111,7 @@ class ezcReflectionClass extends ReflectionClass
                 $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+
             return eval( $cmd );
             //*/
         }
@@ -121,13 +120,14 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns an ezcReflectionMethod object of the method specified by $name.
      *
-     * @param string $name Name of the method
+     * @param  string              $name Name of the method
      * @return ezcReflectionMethod
      * @throws ReflectionException if method doesn't exist
      */
-    public function getMethod( $name ) {
+    public function getMethod($name)
+    {
         $method = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
-        if ( $this->reflectionSource instanceof parent ) {
+        if ($this->reflectionSource instanceof parent) {
             return new ezcReflectionMethod( $this, $method );
         } else {
             return new ezcReflectionMethod( $this, $method->name );
@@ -139,10 +139,11 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @return ezcReflectionMethod
      */
-    public function getConstructor() {
+    public function getConstructor()
+    {
         $constructor = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ($constructor != null) {
-            if ( $this->reflectionSource instanceof parent ) {
+            if ($this->reflectionSource instanceof parent) {
                 return new ezcReflectionMethod( $this, $constructor );
             } else {
                 return new ezcReflectionMethod( $this, $constructor->name );
@@ -155,26 +156,28 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns the methods as an array of ezcReflectionMethod objects.
      *
-     * @param integer $filter
-     *        A combination of
-     *        ReflectionMethod::IS_STATIC,
-     *        ReflectionMethod::IS_PUBLIC,
-     *        ReflectionMethod::IS_PROTECTED,
-     *        ReflectionMethod::IS_PRIVATE,
-     *        ReflectionMethod::IS_ABSTRACT and
-     *        ReflectionMethod::IS_FINAL
+     * @param  integer               $filter
+     *                                       A combination of
+     *                                       ReflectionMethod::IS_STATIC,
+     *                                       ReflectionMethod::IS_PUBLIC,
+     *                                       ReflectionMethod::IS_PROTECTED,
+     *                                       ReflectionMethod::IS_PRIVATE,
+     *                                       ReflectionMethod::IS_ABSTRACT and
+     *                                       ReflectionMethod::IS_FINAL
      * @return ezcReflectionMethod[]
      */
-    public function getMethods( $filter = -1 ) {
+    public function getMethods($filter = -1)
+    {
         $methods = $this->forwardCallToReflectionSource( __FUNCTION__, array( $filter ) );
         $extMethods = array();
-        foreach ( $methods as $method ) {
-            if ( $this->reflectionSource instanceof parent ) {
+        foreach ($methods as $method) {
+            if ($this->reflectionSource instanceof parent) {
                 $extMethods[] = new ezcReflectionMethod( $this, $method );
             } else {
                 $extMethods[] = new ezcReflectionMethod( $this, $method->name );
             }
         }
+
         return $extMethods;
     }
 
@@ -183,13 +186,15 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @return ezcReflectionClass[]
      */
-    public function getInterfaces() {
+    public function getInterfaces()
+    {
         $ifaces = $this->forwardCallToReflectionSource( __FUNCTION__ );
-    	$result = array();
-    	foreach ($ifaces as $i) {
-    		$result[] = new ezcReflectionClass( $i );
-    	}
-    	return $result;
+        $result = array();
+        foreach ($ifaces as $i) {
+            $result[] = new ezcReflectionClass( $i );
+        }
+
+        return $result;
     }
 
     /**
@@ -202,8 +207,7 @@ class ezcReflectionClass extends ReflectionClass
         $parentClass = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ( is_object( $parentClass ) ) {
             return new ezcReflectionClass( $parentClass );
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -211,32 +215,36 @@ class ezcReflectionClass extends ReflectionClass
     /**
      * Returns the class' property specified by its name
      *
-     * @param string $name Name of the property
+     * @param  string                $name Name of the property
      * @return ezcReflectionProperty
-     * @throws RelectionException if property doesn't exist
+     * @throws RelectionException    if property doesn't exist
      */
-    public function getProperty($name) {
+    public function getProperty($name)
+    {
         $prop = $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
+
         return new ezcReflectionProperty($prop, $name);
     }
 
     /**
      * Returns an array of this class' properties
      *
-     * @param integer $filter
-     *        A combination of
-     *        ReflectionProperty::IS_STATIC,
-     *        ReflectionProperty::IS_PUBLIC,
-     *        ReflectionProperty::IS_PROTECTED and
-     *        ReflectionProperty::IS_PRIVATE
+     * @param  integer                 $filter
+     *                                         A combination of
+     *                                         ReflectionProperty::IS_STATIC,
+     *                                         ReflectionProperty::IS_PUBLIC,
+     *                                         ReflectionProperty::IS_PROTECTED and
+     *                                         ReflectionProperty::IS_PRIVATE
      * @return ezcReflectionProperty[] Properties of the class
      */
-    public function getProperties($filter = -1) {
+    public function getProperties($filter = -1)
+    {
         $props = $this->forwardCallToReflectionSource( __FUNCTION__, array( $filter ) );
         $extProps = array();
         foreach ($props as $prop) {
             $extProps[] = new ezcReflectionProperty( $prop );
         }
+
         return $extProps;
     }
 
@@ -247,7 +255,8 @@ class ezcReflectionClass extends ReflectionClass
      * @return string short description of the class
      * @since PHP 5.1.0
      */
-    public function getShortDescription() {
+    public function getShortDescription()
+    {
         return $this->docParser->getShortDescription();
     }
 
@@ -258,33 +267,35 @@ class ezcReflectionClass extends ReflectionClass
      * @return string Long description of the class
      * @since PHP 5.1.0
      */
-    public function getLongDescription() {
+    public function getLongDescription()
+    {
         return $this->docParser->getLongDescription();
     }
 
     /**
      * Checks whether the class is annotated with the annotation $annotation
      *
-     * @param string $annotation Name of the annotation
+     * @param  string  $annotation Name of the annotation
      * @return boolean
      * @since PHP 5.1.0
      */
-    public function hasAnnotation($annotation) {
+    public function hasAnnotation($annotation)
+    {
         return $this->docParser->hasAnnotation($annotation);
     }
 
     /**
      * Returns an array of annotations (optinally only annotations of a given name)
      *
-     * @param string $name Name of the annotations
+     * @param  string                    $name Name of the annotations
      * @return ezcReflectionAnnotation[] Annotations
      * @since PHP 5.1.0
      */
-    public function getAnnotations( $name = '' ) {
-        if ( $name == '' ) {
+    public function getAnnotations($name = '')
+    {
+        if ($name == '') {
             return $this->docParser->getAnnotations();
-        }
-        else {
+        } else {
             return $this->docParser->getAnnotationsByName($name);
         }
     }
@@ -294,7 +305,8 @@ class ezcReflectionClass extends ReflectionClass
      *
      * @return ezcReflectionExtension
      */
-    public function getExtension() {
+    public function getExtension()
+    {
         $ext = $this->forwardCallToReflectionSource( __FUNCTION__ );
         if ($ext) {
             return new ezcReflectionExtension($ext);
@@ -302,7 +314,6 @@ class ezcReflectionClass extends ReflectionClass
             return null;
         }
     }
-
 
     // only pure wrapper methods follow bellow this line
 
@@ -314,7 +325,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return string|boolean Extension name or FALSE
      */
-    public function getExtensionName() {
+    public function getExtensionName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -326,7 +338,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return string Class name
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -339,7 +352,8 @@ class ezcReflectionClass extends ReflectionClass
      * @return string Doc comment
      * @since PHP 5.1.0
      */
-    public function getDocComment() {
+    public function getDocComment()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -349,10 +363,11 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string $name Name of the constant
+     * @param  string $name Name of the constant
      * @return mixed
      */
-    public function getConstant( $name ) {
+    public function getConstant($name)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
     }
 
@@ -365,7 +380,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return array<string, mixed> Constants and their values
      */
-    public function getConstants() {
+    public function getConstants()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -378,7 +394,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return array<string, mixed> Copies of all default property values
      */
-    public function getDefaultProperties() {
+    public function getDefaultProperties()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -390,7 +407,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return integer Line this class' declaration ends at
      */
-    public function getEndLine() {
+    public function getEndLine()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -402,7 +420,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return string The filename of the file this class was declared in
      */
-    public function getFileName() {
+    public function getFileName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -414,7 +433,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return string[] Array of names of interfaces this class implements
      */
-    public function getInterfaceNames() {
+    public function getInterfaceNames()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -426,7 +446,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return integer Bitfield of the access modifiers for this method
      */
-    public function getModifiers() {
+    public function getModifiers()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -438,7 +459,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return integer The line this class' declaration starts at
      */
-    public function getStartLine() {
+    public function getStartLine()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -450,10 +472,11 @@ class ezcReflectionClass extends ReflectionClass
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return array<string,mixed>
-     *         An associative array containing all static property values of
-     *         the class
+     *                             An associative array containing all static property values of
+     *                             the class
      */
-    public function getStaticProperties() {
+    public function getStaticProperties()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -463,12 +486,13 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string $name Name of the static property
-     * @param mixed $default Default value
-     * @return mixed Value of a static property
+     * @param  string $name    Name of the static property
+     * @param  mixed  $default Default value
+     * @return mixed  Value of a static property
      * @since PHP 5.1.0
      */
-    public function getStaticPropertyValue( $name, $default = null ) {
+    public function getStaticPropertyValue($name, $default = null)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $default ) );
     }
 
@@ -478,11 +502,12 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string $name Name of the constant
+     * @param  string  $name Name of the constant
      * @return boolean Whether a constant exists or not
      * @since PHP 5.1.0
      */
-    public function hasConstant( $name ) {
+    public function hasConstant($name)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
     }
 
@@ -492,11 +517,12 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string $name Name of the method
+     * @param  string  $name Name of the method
      * @return boolean Whether a method exists or not
      * @since PHP 5.1.0
      */
-    public function hasMethod( $name ) {
+    public function hasMethod($name)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
     }
 
@@ -506,11 +532,12 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string $name Name of the property
+     * @param  string  $name Name of the property
      * @return boolean Whether a property exists or not
      * @since PHP 5.1.0
      */
-    public function hasProperty( $name ) {
+    public function hasProperty($name)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $name ) );
     }
 
@@ -520,11 +547,12 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string|ReflectionClass $class
-     *        Name or ReflectionClass object of the super class
-     * @return boolean Whether this class is a subclass of the given super lass
+     * @param  string|ReflectionClass $class
+     *                                       Name or ReflectionClass object of the super class
+     * @return boolean                Whether this class is a subclass of the given super lass
      */
-    public function isSubclassOf( $class ) {
+    public function isSubclassOf($class)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $class ) );
     }
 
@@ -534,11 +562,12 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string|ReflectionClass $interface
-     *        Name or ReflectionClass object of the interface
-     * @return boolean Whether the given interface is implemented or not
+     * @param  string|ReflectionClass $interface
+     *                                           Name or ReflectionClass object of the interface
+     * @return boolean                Whether the given interface is implemented or not
      */
-    public function implementsInterface( $interface ) {
+    public function implementsInterface($interface)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $interface ) );
     }
 
@@ -550,7 +579,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return boolean Whether this class is abstract
      */
-    public function isAbstract() {
+    public function isAbstract()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -562,7 +592,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return boolean Whether this class is final
      */
-    public function isFinal() {
+    public function isFinal()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -574,7 +605,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return boolean Whether this class is instantiable
      */
-    public function isInstantiable() {
+    public function isInstantiable()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -586,7 +618,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return boolean Whether this class is an interface
      */
-    public function isInterface() {
+    public function isInterface()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -598,7 +631,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return boolean Whether this class is an internal class
      */
-    public function isInternal() {
+    public function isInternal()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -609,9 +643,10 @@ class ezcReflectionClass extends ReflectionClass
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return boolean
-     *         Whether this class is iterateable (can be used inside foreach)
+     *                 Whether this class is iterateable (can be used inside foreach)
      */
-    public function isIterateable() {
+    public function isIterateable()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -623,7 +658,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return boolean Whether this class is user-defined
      */
-    public function isUserDefined() {
+    public function isUserDefined()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -633,10 +669,11 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param object $object An object to be checked
+     * @param  object  $object An object to be checked
      * @return boolean Whether the given object is an instance of this class
      */
-    public function isInstance( $object ) {
+    public function isInstance($object)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object ) );
     }
 
@@ -646,16 +683,18 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param mixed $argument,...  Arguments
+     * @param  mixed  $argument,... Arguments
      * @return object An instance of this class
      */
-    public function newInstance( $arguments ) {
+    public function newInstance($arguments)
+    {
         /**
          * Note from PHP Manual: func_get_args() returns a copy of the passed
          * arguments only, and does not account for default (non-passed)
          * arguments.
          */
         $arguments = func_get_args();
+
         return $this->forwardCallToReflectionSource( __FUNCTION__, $arguments );
     }
 
@@ -665,11 +704,12 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param array<integer,mixed> $arguments Arguments
-     * @return object An instance of this class
+     * @param  array<integer,mixed> $arguments Arguments
+     * @return object               An instance of this class
      * @since PHP 5.1.3
      */
-    public function newInstanceArgs( array $arguments = null ) {
+    public function newInstanceArgs(array $arguments = null)
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $arguments ) );
     }
 
@@ -679,12 +719,13 @@ class ezcReflectionClass extends ReflectionClass
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @param string $name Name of the static property
-     * @param mixed $default Value
+     * @param  string $name    Name of the static property
+     * @param  mixed  $default Value
      * @return void
      * @since PHP 5.1.0
      */
-    public function setStaticPropertyValue( $name, $value ) {
+    public function setStaticPropertyValue($name, $value)
+    {
         $this->forwardCallToReflectionSource( __FUNCTION__, array( $name, $value ) );
     }
 
@@ -697,7 +738,8 @@ class ezcReflectionClass extends ReflectionClass
      * @return string The name of namespace where this class is defined
      * @since PHP 5.3.0
      */
-    public function getNamespaceName() {
+    public function getNamespaceName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -710,7 +752,8 @@ class ezcReflectionClass extends ReflectionClass
      * @return boolean Whether this class is defined in a namespace
      * @since PHP 5.3.0
      */
-    public function inNamespace() {
+    public function inNamespace()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -721,10 +764,11 @@ class ezcReflectionClass extends ReflectionClass
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return string
-     *         Returns the short name of the class (without namespace part)
+     *                Returns the short name of the class (without namespace part)
      * @since PHP 5.3.0
      */
-    public function getShortName() {
+    public function getShortName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -736,7 +780,8 @@ class ezcReflectionClass extends ReflectionClass
      * instance passed to the constructor.
      * @return string A string representation
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -746,15 +791,15 @@ class ezcReflectionClass extends ReflectionClass
      * Returns the output if TRUE is specified for $return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of
      * the parent class (ReflectionClass::export()).
-     * @param ReflectionClass|string $class
-     *        ReflectionClass object or name of the class
-     * @param boolean $return
-     *        Whether to return (TRUE) or print (FALSE) the output
+     * @param  ReflectionClass|string $class
+     *                                        ReflectionClass object or name of the class
+     * @param  boolean                $return
+     *                                        Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
-    public static function export($class, $return = false) {
+    public static function export($class, $return = false)
+    {
         return parent::export($class, $return);
     }
 
 }
-?>

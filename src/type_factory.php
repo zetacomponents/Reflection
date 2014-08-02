@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,8 +31,8 @@
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-class ezcReflectionTypeFactoryImpl implements ezcReflectionTypeFactory {
-
+class ezcReflectionTypeFactoryImpl implements ezcReflectionTypeFactory
+{
     /**
      * @var ezcReflectionTypeMapper
      */
@@ -41,46 +41,38 @@ class ezcReflectionTypeFactoryImpl implements ezcReflectionTypeFactory {
     /**
      * Constructs a type factory implementation
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->mapper = ezcReflectionTypeMapper::getInstance();
     }
 
     /**
      * Creates a type object for given type name
-     * @param string|ReflectionClass $typeName
+     * @param  string|ReflectionClass $typeName
      * @return ezcReflectionType
      * @todo ArrayAccess stuff, how to handle? has to be implemented
      */
-    public function getType( $typeName )
+    public function getType($typeName)
     {
-        if ( $typeName instanceof ReflectionClass )
-        {
+        if ($typeName instanceof ReflectionClass) {
             return new ezcReflectionObjectType( $typeName );
         }
         $typeName = trim( $typeName );
         if ( empty( $typeName ) ) {
             return null;
-        }
-        elseif (
+        } elseif (
             $this->mapper->isScalarType( $typeName )
             or $this->mapper->isSpecialType( $typeName )
         )
         {
             return new ezcReflectionPrimitiveType( $typeName );
-        }
-        elseif ( $this->mapper->isArray( $typeName ) )
-        {
+        } elseif ( $this->mapper->isArray( $typeName ) ) {
             return new ezcReflectionArrayType( $typeName );
-        }
-        elseif ( $this->mapper->isMixed( $typeName ) )
-        {
+        } elseif ( $this->mapper->isMixed( $typeName ) ) {
             return new ezcReflectionMixedType( $typeName );
-        }
-        else {
-		    // otherwhise it has to be a class name
-		    return new ezcReflectionObjectType( $typeName );
+        } else {
+            // otherwhise it has to be a class name
+            return new ezcReflectionObjectType( $typeName );
         }
     }
 }
-
-?>

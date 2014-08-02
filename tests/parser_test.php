@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,7 +32,8 @@ class ezcReflectionDocCommentParserTest extends ezcTestCase
      */
     private static $docs;
 
-    public function testGetAnnotationsByName() {
+    public function testGetAnnotationsByName()
+    {
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse(self::$docs[0]);
         $annotations = $parser->getAnnotationsByName('license');
@@ -65,7 +66,8 @@ class ezcReflectionDocCommentParserTest extends ezcTestCase
         self::assertEquals(1, count($annotations));
     }
 
-    public function testGetAnnotations() {
+    public function testGetAnnotations()
+    {
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse(self::$docs[0]);
         $annotations = $parser->getAnnotations();
@@ -102,7 +104,8 @@ class ezcReflectionDocCommentParserTest extends ezcTestCase
         self::assertEquals(9, count($annotations));
     }
 
-    public function testGetParamAnnotations() {
+    public function testGetParamAnnotations()
+    {
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse(self::$docs[0]);
         $annotations = $parser->getParamAnnotations();
@@ -122,8 +125,7 @@ class ezcReflectionDocCommentParserTest extends ezcTestCase
 
         self::assertEquals('test3', $annotations[2]->getParamName());
         self::assertEquals('NonExistingType', $annotations[2]->getTypeName());
-        
-        
+
         $parser = ezcReflection::getDocCommentParser();
         $m2 = new ezcReflectionFunction( 'm2' );
         $parser->parse( $m2->getDocComment() );
@@ -141,15 +143,15 @@ class ezcReflectionDocCommentParserTest extends ezcTestCase
             $originalDescription . "\n" . $additionalDescriptionLine,
             $annotations[0]->getDescription()
         );
-        
 
         self::assertNull($annotations[1]->getParamName());
         self::assertEquals('boolean', $annotations[1]->getTypeName());
         self::assertEquals( array( 'boolean' ), $annotations[1]->getParams() );
-        
+
     }
 
-    public function testGetVarAnnotations() {
+    public function testGetVarAnnotations()
+    {
         $comment = <<<EOF
 /**
 * @var string
@@ -157,12 +159,12 @@ class ezcReflectionDocCommentParserTest extends ezcTestCase
 EOF;
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse($comment);
-		$annotations = $parser->getVarAnnotations();
-		self::assertEquals(1, count($annotations));
-		self::assertInstanceOf('ezcReflectionAnnotationVar', $annotations[0]);
-		self::assertEquals('string', $annotations[0]->getTypeName());
-		self::assertEquals('', $annotations[0]->getDescription());
-        
+        $annotations = $parser->getVarAnnotations();
+        self::assertEquals(1, count($annotations));
+        self::assertInstanceOf('ezcReflectionAnnotationVar', $annotations[0]);
+        self::assertEquals('string', $annotations[0]->getTypeName());
+        self::assertEquals('', $annotations[0]->getDescription());
+
         $comment = <<<EOF
    /**
     * @var bool[] An array of
@@ -171,22 +173,23 @@ EOF;
 EOF;
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse($comment);
-		$annotations = $parser->getVarAnnotations();
-		self::assertEquals(1, count($annotations));
-		self::assertInstanceOf('ezcReflectionAnnotationVar', $annotations[0]);
+        $annotations = $parser->getVarAnnotations();
+        self::assertEquals(1, count($annotations));
+        self::assertInstanceOf('ezcReflectionAnnotationVar', $annotations[0]);
         self::assertEquals("An array of\nboolean values.", $annotations[0]->getDescription());
         self::assertEquals('bool[]', $annotations[0]->getTypeName());
         $type = ezcReflection::getReflectionTypeFactory()->getType($annotations[0]->getTypeName());
-		self::assertInstanceOf('ezcReflectionArrayType', $type);
+        self::assertInstanceOf('ezcReflectionArrayType', $type);
         self::assertTrue($type->isArray());
         $arrayType = $type->getValueType();
-		self::assertInstanceOf('ezcReflectionPrimitiveType', $arrayType);
+        self::assertInstanceOf('ezcReflectionPrimitiveType', $arrayType);
         self::assertTrue($arrayType->isPrimitive());
         self::assertTrue($arrayType->isScalarType());
         self::assertEquals('boolean', $arrayType->getTypeName());
     }
 
-    public function testGetReturnAnnotations() {
+    public function testGetReturnAnnotations()
+    {
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse(self::$docs[6]);
         $annotations = $parser->getReturnAnnotations();
@@ -195,13 +198,15 @@ EOF;
         self::assertEquals('string', $annotations[0]->getTypeName());
     }
 
-    public function testHasAnnotation() {
+    public function testHasAnnotation()
+    {
         $parser = ezcReflection::getDocCommentParser();
         $parser->parse(self::$docs[6]);
         self::assertTrue($parser->hasAnnotation('return'));
     }
 
-    public function testGetShortDescription() {
+    public function testGetShortDescription()
+    {
         $class = new ReflectionClass('TestWebservice');
         $doc = $class->getDocComment();
         $parser = ezcReflection::getDocCommentParser();
@@ -211,7 +216,8 @@ EOF;
         self::assertEquals('This is the short description', $desc);
     }
 
-    public function testGetLongDescription() {
+    public function testGetLongDescription()
+    {
         $class = new ReflectionClass('TestWebservice');
         $doc = $class->getDocComment();
         $parser = ezcReflection::getDocCommentParser();
@@ -264,4 +270,3 @@ ENDDATA;
         return new PHPUnit_Framework_TestSuite( "ezcReflectionDocCommentParserTest" );
     }
 }
-?>

@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -36,7 +36,8 @@ class ezcReflectionClassTest extends ezcTestCase
     protected $classReflectionFunction;
     /**#@-*/
 
-	public function setUp() {
+    public function setUp()
+    {
         // comparison objects for expected values
         $this->expected = array(
             'SomeClass'
@@ -57,50 +58,58 @@ class ezcReflectionClassTest extends ezcTestCase
         );
     }
 
-    public function setUpFixtures() {
+    public function setUpFixtures()
+    {
         $this->class                   = new ezcReflectionClass( 'SomeClass' );
         $this->classTestWebservice     = new ezcReflectionClass( 'TestWebservice' );
         $this->classReflectionFunction = new ezcReflectionClass( 'ReflectionFunction' );
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this->class);
     }
 
     /**
      * @expectedException ezcReflectionCallToUndefinedMethodException
      */
-    public function testCall() {
+    public function testCall()
+    {
         $this->class->undefinedMethod();
     }
 
-    public function testGetName() {
+    public function testGetName()
+    {
         self::assertEquals('SomeClass', $this->class->getName());
     }
 
-    public function testGetMethod() {
+    public function testGetMethod()
+    {
         $method = $this->class->getMethod('helloWorld');
         self::assertInstanceOf('ezcReflectionMethod', $method);
         self::assertEquals('helloWorld', $method->getName());
     }
 
-    public function testGetConstructor() {
+    public function testGetConstructor()
+    {
         $method = $this->class->getConstructor();
         self::assertInstanceOf('ezcReflectionMethod', $method);
         self::assertEquals('__construct', $method->getName());
         self::assertEquals('SomeClass', $method->getDeclaringClass()->getName());
-        
+
         $method = $this->classReflectionFunction->getConstructor();
         self::assertInstanceOf('ezcReflectionMethod', $method);
         self::assertEquals('__construct', $method->getName());
         self::assertEquals('ReflectionFunction', $method->getDeclaringClass()->getName());
     }
 
-    public function testGetConstructorReturnsNull() {
+    public function testGetConstructorReturnsNull()
+    {
         self::assertNull( $this->classTestWebservice->getConstructor() );
     }
 
-	public function testGetInterfaces() {
+    public function testGetInterfaces()
+    {
         $ifaces = $this->class->getInterfaces();
 
         self::assertInstanceOf('ezcReflectionClass', $ifaces[0]);
@@ -108,7 +117,8 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertEquals(1, count($ifaces));
     }
 
-    public function testGetMethods() {
+    public function testGetMethods()
+    {
         $methods = $this->classTestWebservice->getMethods();
         self::assertEquals(0, count($methods));
 
@@ -125,18 +135,21 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertEquals(0, count($expectedMethods));
     }
 
-    public function testGetParentClass() {
+    public function testGetParentClass()
+    {
         $parent = $this->class->getParentClass();
 
         self::assertInstanceOf('ezcReflectionClass', $parent);
         self::assertEquals('BaseClass', $parent->getName());
     }
 
-    public function testGetParentClassFalse() {
+    public function testGetParentClassFalse()
+    {
         self::assertFalse( $this->classTestWebservice->getParentClass() );
     }
 
-    public function testGetProperty() {
+    public function testGetProperty()
+    {
         $prop = $this->class->getProperty('fields');
 
         self::assertInstanceOf('ezcReflectionProperty', $prop);
@@ -144,14 +157,14 @@ class ezcReflectionClassTest extends ezcTestCase
 
         try {
             $prop = $this->class->getProperty('none-existing-property');
-        }
-        catch (ReflectionException $expected) {
+        } catch (ReflectionException $expected) {
             return;
         }
         $this->fail('ReflectionException has not been raised on none existing property.');
     }
 
-    public function testGetProperties() {
+    public function testGetProperties()
+    {
         $properties = $this->classTestWebservice->getProperties();
 
         $expected = array('prop1', 'prop2', 'prop3');
@@ -165,13 +178,15 @@ class ezcReflectionClassTest extends ezcTestCase
         self::assertEquals(0, count($expected));
     }
 
-    public function testGetShortDescription() {
+    public function testGetShortDescription()
+    {
         $desc = $this->classTestWebservice->getShortDescription();
 
         self::assertEquals('This is the short description', $desc);
     }
 
-    public function testGetLongDescription() {
+    public function testGetLongDescription()
+    {
         $desc = $this->classTestWebservice->getLongDescription();
 
         $expected = <<<ENDDATA
@@ -203,13 +218,15 @@ ENDDATA;
         self::assertEquals($expected, $desc);
     }
 
-    public function testHasAnnotation() {
+    public function testHasAnnotation()
+    {
         self::assertFalse($this->class->hasAnnotation('foobar'));
 
         self::assertTrue($this->classTestWebservice->hasAnnotation('foobar'));
     }
 
-    public function testGetAnnotations() {
+    public function testGetAnnotations()
+    {
         $annotations = $this->class->getAnnotations();
 
         $expectedAnnotations = array('licence', 'donotdocument', 'testclass', 'ignore');
@@ -220,17 +237,19 @@ ENDDATA;
         ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
-    public function testGetAnnotationsByName() {
+    public function testGetAnnotationsByName()
+    {
         $annotations = $this->class->getAnnotations( 'licence' );
         self::assertTrue( is_array( $annotations ) );
         self::assertEquals( 1, count( $annotations ) );
-        foreach ( $annotations as $annotation ) {
+        foreach ($annotations as $annotation) {
             $this->assertInstanceOf( 'ezcReflectionAnnotation', $annotation );
             $this->assertContains( $annotation->getName(), 'licence' );
         }
     }
 
-    public function testGetExtension() {
+    public function testGetExtension()
+    {
         $ext = $this->classReflectionFunction->getExtension();
         self::assertInstanceOf('ezcReflectionExtension', $ext);
         self::assertEquals('Reflection', $ext->getName());
@@ -239,29 +258,34 @@ ENDDATA;
         self::assertNull($ext);
     }
 
-    public function testGetExtensionName() {
+    public function testGetExtensionName()
+    {
         self::assertEquals( 'Reflection', $this->classReflectionFunction->getExtensionName() );
         self::assertEquals( '', $this->class->getExtensionName() );
     }
-    
-    public function testGetConstant() {
-    	self::assertEquals( 'ConstantValue', $this->actual['SomeClass']->getConstant( 'CLASS_CONSTANT' ) );
-    	self::assertEquals( '', $this->actual['SomeClass']->getConstant( 'NON_EXISTING_CLASS_CONSTANT' ) );
-    }
-    
-    public function testSetStaticPropertyValue() {
-        $oldValue = $this->expected['SomeClass']->getStaticPropertyValue( 'staticProperty' );
-        $newValue = 'aNewValue';
-    	$this->actual['SomeClass']->setStaticPropertyValue( 'staticProperty', $newValue );
-    	self::assertEquals( $newValue, $this->expected['SomeClass']->getStaticPropertyValue( 'staticProperty' ) );
-    	$this->expected['SomeClass']->setStaticPropertyValue( 'staticProperty', $oldValue );
+
+    public function testGetConstant()
+    {
+        self::assertEquals( 'ConstantValue', $this->actual['SomeClass']->getConstant( 'CLASS_CONSTANT' ) );
+        self::assertEquals( '', $this->actual['SomeClass']->getConstant( 'NON_EXISTING_CLASS_CONSTANT' ) );
     }
 
-    public function testExport() {
+    public function testSetStaticPropertyValue()
+    {
+        $oldValue = $this->expected['SomeClass']->getStaticPropertyValue( 'staticProperty' );
+        $newValue = 'aNewValue';
+        $this->actual['SomeClass']->setStaticPropertyValue( 'staticProperty', $newValue );
+        self::assertEquals( $newValue, $this->expected['SomeClass']->getStaticPropertyValue( 'staticProperty' ) );
+        $this->expected['SomeClass']->setStaticPropertyValue( 'staticProperty', $oldValue );
+    }
+
+    public function testExport()
+    {
         self::assertEquals( ReflectionClass::export('TestWebservice', true), ezcReflectionClass::export('TestWebservice', true) );
     }
 
-    public function getWrapperMethods() {
+    public function getWrapperMethods()
+    {
         $wrapperMethods = array(
             array( '__toString', array() ),
             array( 'getName', array() ),
@@ -293,28 +317,25 @@ ENDDATA;
         } else {
             $wrapperMethods530 = array();
         }
+
         return array_merge( $wrapperMethods, $wrapperMethods530 );
     }
 
     /**
      * @dataProvider getWrapperMethods
      */
-    public function testWrapperMethods( $method, $arguments )
+    public function testWrapperMethods($method, $arguments)
     {
-        foreach ( array_keys( $this->expected ) as $fixtureName )
-        {
+        foreach ( array_keys( $this->expected ) as $fixtureName ) {
             $actual = call_user_func_array(
                 array( $this->actual[ $fixtureName ], $method ), $arguments
             );
             $expected = call_user_func_array(
                 array( $this->expected[ $fixtureName ], $method ), $arguments
             );
-            if ( $expected instanceOf Reflector )
-            {
+            if ($expected instanceof Reflector) {
                 self::assertEquals( (string) $expected, (string) $actual );
-            }
-            else
-            {
+            } else {
                 self::assertEquals( $expected, $actual );
             }
         }
@@ -413,11 +434,11 @@ ENDDATA;
             ),
         );
     }
-    
+
     /**
      * @dataProvider getWrapperMethodsWithParameters
      */
-    public function testWrapperMethodsWithParameters( $fixtureName, $method, $arguments )
+    public function testWrapperMethodsWithParameters($fixtureName, $method, $arguments)
     {
         $actual = call_user_func_array(
             array( $this->actual[ $fixtureName ], $method ), $arguments
@@ -425,12 +446,9 @@ ENDDATA;
         $expected = call_user_func_array(
             array( $this->expected[ $fixtureName ], $method ), $arguments
         );
-        if ( $expected instanceOf Reflector )
-        {
+        if ($expected instanceof Reflector) {
             self::assertEquals( (string) $expected, (string) $actual );
-        }
-        else
-        {
+        } else {
             self::assertEquals( $expected, $actual );
         }
     }
@@ -440,4 +458,3 @@ ENDDATA;
          return new PHPUnit_Framework_TestSuite( "ezcReflectionClassTest" );
     }
 }
-?>

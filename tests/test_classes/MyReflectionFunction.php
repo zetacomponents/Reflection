@@ -1,9 +1,9 @@
 <?php
-class MyReflectionFunction extends ReflectionFunction {
-
+class MyReflectionFunction extends ReflectionFunction
+{
     public function doSomeMetaProgramming()
-	{
-		return true;
-	}
+    {
+        return true;
+    }
 
 }

@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -28,7 +28,8 @@
 class ezcReflectionParameterByNameTest extends ezcReflectionParameterTest
 {
 
-    public function setUpFixtures() {
+    public function setUpFixtures()
+    {
         // function with undocumented parameter $t that has default value 'foo'
 //        $this->expected['mmm'][0] = new ReflectionParameter( 'mmm', 't' );
         $this->actual['mmm'][0] = new ezcReflectionParameter( 'mmm', 't' );
@@ -36,7 +37,7 @@ class ezcReflectionParameterByNameTest extends ezcReflectionParameterTest
         // function with three parameters that have type annotations but no type hints
         $paramNames = array( 'test', 'test2', 'test3' );
         $paramTypes = array( 'string', 'ezcReflection', 'ReflectionClass' );
-        for ( $i = 0; $i <= 2; ++$i ) {
+        for ($i = 0; $i <= 2; ++$i) {
 //            $this->expected['m1'][$i]
 //                = new ReflectionParameter( 'm1', $paramNames[$i] );
             $this->actualParamsOfM1[$i]
@@ -62,14 +63,16 @@ class ezcReflectionParameterByNameTest extends ezcReflectionParameterTest
             = new ezcReflectionParameter( 'functionWithTypeHint', 'paramWithTypeHintOnly', 'ReflectionClass' );
     }
 
-    public function getFunctionNamesAndParamKeys() {
+    public function getFunctionNamesAndParamKeys()
+    {
         $result = array();
         foreach ( $this->getExpectedFixtures() as $functionName => $expParams ) {
-            foreach ( $expParams as $paramKey => $expParam ) {
+            foreach ($expParams as $paramKey => $expParam) {
                 $result[]
                     = array( $functionName, $expParam->getName() );
             }
         }
+
         return $result;
     }
 
@@ -78,4 +81,3 @@ class ezcReflectionParameterByNameTest extends ezcReflectionParameterTest
          return new PHPUnit_Framework_TestSuite( "ezcReflectionParameterByNameTest" );
     }
 }
-?>

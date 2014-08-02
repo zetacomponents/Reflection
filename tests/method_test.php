@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,8 @@
 
 class ezcReflectionMethodTest extends ezcReflectionFunctionTest
 {
-	public function setUp() {
+    public function setUp()
+    {
         // comparison objects for expected values
         $this->php_fctM1 = new ReflectionMethod( 'TestMethods', 'm1' );
         $this->php_fctM2 = new ReflectionMethod( 'TestMethods', 'm2' );
@@ -38,7 +39,8 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $this->setUpFixtures();
     }
 
-    protected function setUpFixtures() {
+    protected function setUpFixtures()
+    {
         $this->fctM1 = new ezcReflectionMethod( 'TestMethods', 'm1' );
         $this->fctM2 = new ezcReflectionMethod( 'TestMethods', 'm2' );
         $this->fctM3 = new ezcReflectionMethod( 'TestMethods', 'm3' );
@@ -55,14 +57,16 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         $this->ezc_ezcReflectionMethod_getAnnotations = new ezcReflectionMethod('ezcReflectionMethod', 'getAnnotations');
     }
 
-    public function testIsMagic() {
+    public function testIsMagic()
+    {
         self::assertFalse($this->fctM1->isMagic());
 
         $class = $this->fctM1->getDeclaringClass();
         self::assertTrue($class->getConstructor()->isMagic());
     }
 
-    public function testGetAnnotations() {
+    public function testGetAnnotations()
+    {
         $class = new ezcReflectionClass('ezcReflectionClass');
         $method = $class->getMethod('getMethod');
         $annotations = $method->getAnnotations();
@@ -82,41 +86,48 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
-    public function testGetAnnotationsByName( $fixtureName = 'fctM4' ) {
+    public function testGetAnnotationsByName($fixtureName = 'fctM4')
+    {
         parent::testGetAnnotationsByName( $fixtureName );
     }
 
-    public function testHasAnnotation() {
+    public function testHasAnnotation()
+    {
         self::assertTrue($this->fctM4->hasAnnotation('webmethod'));
         self::assertFalse($this->fctM4->hasAnnotation('fooobaaar'));
     }
 
-    public function testGetLongDescription() {
+    public function testGetLongDescription()
+    {
         $desc = $this->fctM3->getLongDescription();
 
         $expected = "This is the long description with may be additional infos and much more lines\nof text.\n\nEmpty lines are valide to.\n\nfoo bar";
         self::assertEquals($expected, $desc);
     }
 
-    public function testGetShortDescription() {
+    public function testGetShortDescription()
+    {
         $desc = $this->fctM3->getShortDescription();
 
         $expected = "This is the short description";
         self::assertEquals($expected, $desc);
     }
 
-    public function testGetReturnDescription() {
+    public function testGetReturnDescription()
+    {
         $desc = $this->fctM4->getReturnDescription();
         self::assertEquals("Hello\nWorld!", $desc);
     }
 
-    public function testGetReturnType() {
+    public function testGetReturnType()
+    {
         $type = $this->fctM4->getReturnType();
         self::assertInstanceOf('ezcReflectionType', $type);
         self::assertEquals('string', $type->getTypeName());
     }
 
-    public function testGetParameters() {
+    public function testGetParameters()
+    {
         $params = $this->ezc_ezcReflectionMethod_getAnnotations->getParameters();
 
         $expectedParams = array('name');
@@ -129,16 +140,18 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         self::assertEquals(0, count($expectedParams));
     }
 
-    public function testIsInherited() {
+    public function testIsInherited()
+    {
         self::assertFalse( $this->ezc_TestMethods2_m2->isInherited() );
         self::assertTrue(  $this->ezc_TestMethods2_m3->isInherited() );
         self::assertFalse( $this->ezc_TestMethods2_newMethod->isInherited() );
-        self::assertTrue(  $this->ezc_ReflectionMethod_isInternal->isInherited() ); 
+        self::assertTrue(  $this->ezc_ReflectionMethod_isInternal->isInherited() );
         self::assertFalse( $this->ezc_ezcReflectionMethod_isInternal->isInherited() );
         self::assertFalse( $this->ezc_ezcReflectionMethod_isInherited->isInherited() );
     }
 
-    public function testIsOverriden() {
+    public function testIsOverriden()
+    {
         self::assertTrue(  $this->ezc_TestMethods2_m2->isOverridden() );
         self::assertFalse( $this->ezc_TestMethods2_newMethod->isOverridden() );
         self::assertFalse( $this->ezc_TestMethods2_m4->isOverridden() );
@@ -146,117 +159,137 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         self::assertFalse( $this->ezc_ReflectionMethod_isInternal->isOverridden() );
     }
 
-    public function testIsIntroduced() {
+    public function testIsIntroduced()
+    {
         self::assertFalse( $this->ezc_TestMethods2_m2->isIntroduced() );
         self::assertTrue(  $this->ezc_TestMethods2_newMethod->isIntroduced() );
         self::assertFalse( $this->ezc_TestMethods2_m4->isIntroduced() );
     }
 
-	public function testIsDisabled() {
-    	// is not available for methods
+    public function testIsDisabled()
+    {
+        // is not available for methods
     }
 
-    public function testGetCode() {
+    public function testGetCode()
+    {
         self::assertEquals( "    public function m1() {\n\n    }\n", $this->fctM1->getCode() );
         self::assertEquals( "    public function m2() {\n\n    }\n", $this->fctM2->getCode() );
         self::assertEquals( "    public function m3(\$undocumented) {\n        static \$staticVar;\n    }\n", $this->fctM3->getCode() );
         self::assertEquals( "/* ReflectionClass::hasMethod is an internal function. Therefore the source code is not available. */", $this->fct_method_exists->getCode() );
     }
 
-
     // the following methods do not contain additional features
     // they just call the parent method or the reflection source
 
-	public function testGetFileName() {
-    	self::assertEquals('methods.php', basename($this->fctM1->getFileName()));
+    public function testGetFileName()
+    {
+        self::assertEquals('methods.php', basename($this->fctM1->getFileName()));
     }
 
-    public function testGetStartLine() {
-    	self::assertEquals(16, $this->fctM1->getStartLine());
+    public function testGetStartLine()
+    {
+        self::assertEquals(16, $this->fctM1->getStartLine());
     }
 
-    public function testGetEndLine() {
-    	self::assertEquals(18, $this->fctM1->getEndLine());
+    public function testGetEndLine()
+    {
+        self::assertEquals(18, $this->fctM1->getEndLine());
     }
 
-	public function testGetDocComment() {
-    	self::assertEquals("/**
+    public function testGetDocComment()
+    {
+        self::assertEquals("/**
      * @foo
      * @bar
      * @foobar
      */", $this->fctM2->getDocComment());
     }
 
-    public function testInvoke() {
+    public function testInvoke()
+    {
         self::assertEquals(
             $this->php_fct_method_exists->invoke( new ReflectionClass('ReflectionClass'), 'hasMethod' ),
             $this->fct_method_exists->invoke( new ReflectionClass('ReflectionClass'), 'hasMethod' )
         );
     }
 
-    public function testInvokeArgs() {
+    public function testInvokeArgs()
+    {
         self::assertEquals(
             $this->php_fct_method_exists->invokeArgs( new ReflectionClass('ReflectionClass'), array( 'hasMethod' ) ),
             $this->fct_method_exists->invokeArgs( new ReflectionClass('ReflectionClass'), array( 'hasMethod' ) )
         );
     }
 
-	public function testGetNumberOfParameters() {
-    	self::assertEquals(1, $this->fctM3->getNumberOfParameters());
-    	self::assertEquals(0, $this->fctM1->getNumberOfParameters());
+    public function testGetNumberOfParameters()
+    {
+        self::assertEquals(1, $this->fctM3->getNumberOfParameters());
+        self::assertEquals(0, $this->fctM1->getNumberOfParameters());
     }
 
-    public function testGetNumberOfRequiredParameters() {
-    	self::assertEquals(0, $this->fctM1->getNumberOfRequiredParameters());
-    	self::assertEquals(1, $this->fctM3->getNumberOfRequiredParameters());
+    public function testGetNumberOfRequiredParameters()
+    {
+        self::assertEquals(0, $this->fctM1->getNumberOfRequiredParameters());
+        self::assertEquals(1, $this->fctM3->getNumberOfRequiredParameters());
     }
 
-    public function testIsFinal() {
-    	self::assertFalse($this->fctM1->isFinal());
-    	self::assertFalse($this->fctM2->isFinal());
+    public function testIsFinal()
+    {
+        self::assertFalse($this->fctM1->isFinal());
+        self::assertFalse($this->fctM2->isFinal());
     }
 
-	public function testIsAbstract() {
-    	self::assertFalse($this->fctM1->isAbstract());
-    	self::assertFalse($this->fctM2->isAbstract());
+    public function testIsAbstract()
+    {
+        self::assertFalse($this->fctM1->isAbstract());
+        self::assertFalse($this->fctM2->isAbstract());
     }
 
-	public function testIsPublic() {
-    	self::assertTrue($this->fctM1->isPublic());
-    	self::assertTrue($this->fctM2->isPublic());
+    public function testIsPublic()
+    {
+        self::assertTrue($this->fctM1->isPublic());
+        self::assertTrue($this->fctM2->isPublic());
     }
 
-	public function testIsPrivate() {
-    	self::assertFalse($this->fctM1->isPrivate());
-    	self::assertFalse($this->fctM2->isPrivate());
+    public function testIsPrivate()
+    {
+        self::assertFalse($this->fctM1->isPrivate());
+        self::assertFalse($this->fctM2->isPrivate());
     }
 
-	public function testIsProtected() {
-    	self::assertFalse($this->fctM1->isProtected());
-    	self::assertFalse($this->fctM2->isProtected());
+    public function testIsProtected()
+    {
+        self::assertFalse($this->fctM1->isProtected());
+        self::assertFalse($this->fctM2->isProtected());
     }
 
-	public function testIsStatic() {
-    	self::assertFalse($this->fctM1->isStatic());
-    	self::assertFalse($this->fctM2->isStatic());
+    public function testIsStatic()
+    {
+        self::assertFalse($this->fctM1->isStatic());
+        self::assertFalse($this->fctM2->isStatic());
     }
 
-	public function testIsConstructor() {
-    	self::assertFalse($this->fctM1->isConstructor());
-    	self::assertFalse($this->fctM2->isConstructor());
+    public function testIsConstructor()
+    {
+        self::assertFalse($this->fctM1->isConstructor());
+        self::assertFalse($this->fctM2->isConstructor());
     }
 
-	public function testIsDestructor() {
-    	self::assertFalse($this->fctM1->isDestructor());
-    	self::assertFalse($this->fctM2->isDestructor());
+    public function testIsDestructor()
+    {
+        self::assertFalse($this->fctM1->isDestructor());
+        self::assertFalse($this->fctM2->isDestructor());
     }
 
-	public function testGetModifiers() {
-    	self::assertEquals(65792, $this->fctM1->getModifiers());
-    	self::assertEquals(65792, $this->fctM2->getModifiers());
+    public function testGetModifiers()
+    {
+        self::assertEquals(65792, $this->fctM1->getModifiers());
+        self::assertEquals(65792, $this->fctM2->getModifiers());
     }
 
-    public function testExport() {
+    public function testExport()
+    {
         self::assertEquals(
             ReflectionMethod::export( 'TestMethods', 'm1', true ),
             ezcReflectionMethod::export( 'TestMethods', 'm1', true )
@@ -291,7 +324,8 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
         );
     }
 
-    public function getGetClasses() {
+    public function getGetClasses()
+    {
         return array(
             array( 'fctM1', 'TestMethods' ),
             array( 'fctM2', 'TestMethods' ),
@@ -313,11 +347,13 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     /**
      * @dataProvider getGetClasses
      */
-    public function testGetClass( $method, $expectedClassName ) {
+    public function testGetClass($method, $expectedClassName)
+    {
         self::assertEquals( $expectedClassName, $this->$method->getCurrentClass()->getName() );
     }
 
-    public function getGetDeclaringClasses() {
+    public function getGetDeclaringClasses()
+    {
         return array(
             array( 'fctM1', 'TestMethods' ),
             array( 'fctM2', 'TestMethods' ),
@@ -339,13 +375,15 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
     /**
      * @dataProvider getGetDeclaringClasses
      */
-    public function testGetDeclaringClass( $method, $expectedDeclaringClassName ) {
+    public function testGetDeclaringClass($method, $expectedDeclaringClassName)
+    {
         $declaringClass = $this->$method->getDeclaringClass();
         self::assertInstanceOf( 'ezcReflectionClass', $declaringClass );
         self::assertEquals( $expectedDeclaringClassName, $declaringClass->getName() );
     }
 
-    public function getWrapperMethods() {
+    public function getWrapperMethods()
+    {
         $wrapperMethodsParent = parent::getWrapperMethods();
         $wrapperMethods = array(
             array( 'isFinal', array() ),
@@ -359,6 +397,7 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
             array( 'getModifiers', array() ),
             array( 'getPrototype', array() ),
         );
+
         return array_merge( $wrapperMethodsParent, $wrapperMethods );
     }
 
@@ -367,4 +406,3 @@ class ezcReflectionMethodTest extends ezcReflectionFunctionTest
          return new PHPUnit_Framework_TestSuite( "ezcReflectionMethodTest" );
     }
 }
-?>

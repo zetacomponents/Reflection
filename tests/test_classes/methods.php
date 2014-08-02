@@ -1,20 +1,20 @@
 <?php
 
-class TestMethods {
-
+class TestMethods
+{
     /**
      * @oneannotationonly
      */
-    public function __construct() {
-
+    public function __construct()
+    {
     }
 
     /**
      * @param
      * @author
      */
-    public function m1() {
-
+    public function m1()
+    {
     }
 
     /**
@@ -22,8 +22,8 @@ class TestMethods {
      * @bar
      * @foobar
      */
-    public function m2() {
-
+    public function m2()
+    {
     }
 
     /**
@@ -36,10 +36,10 @@ class TestMethods {
      *
      * foo bar
      */
-    public function m3($undocumented) {
+    public function m3($undocumented)
+    {
         static $staticVar;
     }
-
 
     /**
      * To check whether an annotation was used
@@ -48,15 +48,13 @@ class TestMethods {
      * @restout XbelSerializer
      * @webmethod
      * @author
-     * @param string $test
-     * @param ezcReflection $test2
-     * @param NonExistingType $test3
-     * @return string Hello
-     *         World!
+     * @param  string          $test
+     * @param  ezcReflection   $test2
+     * @param  NonExistingType $test3
+     * @return string          Hello
+     *                               World!
      */
-    public function m4() {
-
+    public function m4()
+    {
     }
 }
-
-?>

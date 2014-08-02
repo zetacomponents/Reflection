@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -41,20 +41,20 @@ class ezcReflectionTypeMapper
     const CANONICAL_NAME_INTEGER  = 'integer';
     const CANONICAL_NAME_FLOAT    = 'float';
     const CANONICAL_NAME_STRING   = 'string';
-    
+
     // compound types
     const CANONICAL_NAME_ARRAY    = 'array';
     const CANONICAL_NAME_OBJECT   = 'object';
-    
+
     // special types
     const CANONICAL_NAME_RESOURCE = 'resource';
     const CANONICAL_NAME_NULL     = 'NULL';
-    
+
     // pseudo-types for readability reasons
     const CANONICAL_NAME_MIXED    = 'mixed';
     const CANONICAL_NAME_CALLBACK = 'callback';
     const CANONICAL_NAME_NUMBER   = 'number';
-    
+
     // regular expressions for complex array notations
     const REGEXP_TYPE_NAME_LIST = '/^(.+)\[\]$/';
     const REGEXP_TYPE_NAME_MAP  = '/^array\s*\((\S+?)=>(\S+)\)$/';
@@ -90,6 +90,7 @@ class ezcReflectionTypeMapper
         if (self::$instance == null) {
             self::$instance = new ezcReflectionTypeMapper();
         }
+
         return self::$instance;
     }
 
@@ -174,39 +175,36 @@ class ezcReflectionTypeMapper
 
     /**
      * Maps a type to a canonical type name
-     * @param string $typeName
+     * @param  string $typeName
      * @return string
      */
-    public function getTypeName( $typeName ) {
+    public function getTypeName($typeName)
+    {
         $typeName = trim( $typeName );
-        if ( isset( $this->mappingTable[ strtolower( $typeName ) ] ) )
-        {
+        if ( isset( $this->mappingTable[ strtolower( $typeName ) ] ) ) {
             return $this->mappingTable[ strtolower( $typeName ) ];
-        }
-        else
-        {
+        } else {
             return $typeName;
         }
     }
 
     /**
      * Maps a typename to the name of the correspondent XML Schema datatype
-     * @param string $typeName
+     * @param  string $typeName
      * @return string
      */
-    public function getXmlType($typeName) {
+    public function getXmlType($typeName)
+    {
         if (isset($this->xmlMappingTable[$typeName])) {
             // it is assumed that the method is mostly called
             // with the standard name of the type
             return $this->xmlMappingTable[$typeName];
-        }
-        else {
+        } else {
             // try to obtain the standard name for the type
             $typeName = $this->getTypeName($typeName);
             if (isset($this->xmlMappingTable[$typeName])) {
                 return $this->xmlMappingTable[$typeName];
-            }
-            else {
+            } else {
                 return null;
             }
         }
@@ -214,19 +212,19 @@ class ezcReflectionTypeMapper
 
     /**
      * Tests whether the given type is a scalar type.
-     * 
+     *
      * The types integer, float, string, and boolean are considered to be
      * scalar.
-     * 
+     *
      * The types array, object, resource, NULL, mixed, number, and callback are
      * not scalar.
-     * 
-     * @param String $typeName
+     *
+     * @param  String  $typeName
      * @return Boolean
      */
-    public function isScalarType( $typeName )
+    public function isScalarType($typeName)
     {
-        $typeName = $this->getTypeName( $typeName ); 
+        $typeName = $this->getTypeName( $typeName );
         if (
             $typeName == self::CANONICAL_NAME_BOOLEAN
             or $typeName == self::CANONICAL_NAME_INTEGER
@@ -236,20 +234,21 @@ class ezcReflectionTypeMapper
         {
             return true;
         }
+
         return false;
     }
-    
+
     /**
      * Tests whether the given type is a special type.
-     * 
+     *
      * Only the types NULL and resource are considered to be special types.
-     * 
-     * @param String $typeName
+     *
+     * @param  String  $typeName
      * @return Boolean
      */
-    public function isSpecialType( $typeName )
+    public function isSpecialType($typeName)
     {
-        $typeName = $this->getTypeName( $typeName ); 
+        $typeName = $this->getTypeName( $typeName );
         if (
             $typeName == self::CANONICAL_NAME_NULL
             or $typeName == self::CANONICAL_NAME_RESOURCE
@@ -257,51 +256,49 @@ class ezcReflectionTypeMapper
         {
             return true;
         }
+
         return false;
     }
 
     /**
      * Test whether the given type is an array or hash map
-     * 
-     * @param string $typeName
+     *
+     * @param  string  $typeName
      * @return boolean
      */
-    public function isArray( $typeName )
+    public function isArray($typeName)
     {
         $typeName = $this->getTypeName( $typeName );
-        if ( strlen( $typeName ) > 0 )
-        {
+        if ( strlen( $typeName ) > 0 ) {
             // last two chars are [], thus it should be something like string[]
             //if ( strlen( $typeName ) > 2 and substr( $typeName, -2 ) == '[]' )
-            if ( preg_match( self::REGEXP_TYPE_NAME_LIST, $typeName ) )
-            {
-                return true;
-            }
-            
-            // may be the author just wrote 'array'
-            elseif ( $typeName == self::CANONICAL_NAME_ARRAY )
-            {
+            if ( preg_match( self::REGEXP_TYPE_NAME_LIST, $typeName ) ) {
                 return true;
             }
 
-        	// test for array map types array(int=>float)
-            elseif ( preg_match( self::REGEXP_TYPE_NAME_MAP, $typeName ) )
-            {
+            // may be the author just wrote 'array'
+            elseif ($typeName == self::CANONICAL_NAME_ARRAY) {
+                return true;
+            }
+
+            // test for array map types array(int=>float)
+            elseif ( preg_match( self::REGEXP_TYPE_NAME_MAP, $typeName ) ) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * Tests whether the given type is described as mixed, number, or callback.
-     * 
-     * @param string $typeName
+     *
+     * @param  string  $typeName
      * @return boolean
      */
-    public function isMixed( $typeName )
+    public function isMixed($typeName)
     {
-        $typeName = $this->getTypeName( $typeName ); 
+        $typeName = $this->getTypeName( $typeName );
         if (
             $typeName == self::CANONICAL_NAME_MIXED
             or $typeName == self::CANONICAL_NAME_NUMBER
@@ -311,7 +308,7 @@ class ezcReflectionTypeMapper
         {
             return true;
         }
+
         return false;
     }
 }
-?>

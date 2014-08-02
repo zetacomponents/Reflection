@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -35,7 +35,7 @@
 class ezcReflectionProperty extends ReflectionProperty
 {
 
-	/**
+    /**
      * @var ezcReflectionDocCommentParser Parser for source code annotations
      */
     protected $docParser;
@@ -45,24 +45,23 @@ class ezcReflectionProperty extends ReflectionProperty
      *      Name, instance of the property's class
      *      or ReflectionProperty object of the property
      */
-	protected $reflectionSource;
+    protected $reflectionSource;
 
     /**
      * Constructs a new ezcReflectionProperty object
      *
      * Throws an Exception in case the given property does not exist
      * @param string|object|ReflectionProperty $class
-     *        Name, instance of the property's class
-     *        or ReflectionProperty object of the property
-     * @param string $name
-     *        Name of the property to be reflected.
-     *        Can be null or will be ignored if a ReflectionProperty object is
-     *        given as first parameter.
+     *                                                Name, instance of the property's class
+     *                                                or ReflectionProperty object of the property
+     * @param string                           $name
+     *                                                Name of the property to be reflected.
+     *                                                Can be null or will be ignored if a ReflectionProperty object is
+     *                                                given as first parameter.
      */
-    public function __construct( $class, $name = null )
+    public function __construct($class, $name = null)
     {
-        if ( !$class instanceof ReflectionProperty )
-        {
+        if (!$class instanceof ReflectionProperty) {
             parent::__construct( $class, $name );
         }
         $this->reflectionSource = $class;
@@ -75,21 +74,19 @@ class ezcReflectionProperty extends ReflectionProperty
      * Use overloading to call additional methods
      * of the ReflectionProperty instance given to the constructor.
      *
-     * @param string $method Method to be called
-     * @param array  $arguments Arguments that were passed
+     * @param  string $method    Method to be called
+     * @param  array  $arguments Arguments that were passed
      * @return mixed
      */
-    public function __call( $method, $arguments )
+    public function __call($method, $arguments)
     {
-        $callback = array( $this->reflectionSource, $method );  
+        $callback = array( $this->reflectionSource, $method );
         if ( $this->reflectionSource instanceof parent
              and is_callable( $callback ) )
         {
             // query external reflection object
             return call_user_func_array( $callback, $arguments );
-        }
-        else
-        {
+        } else {
             throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
         }
     }
@@ -101,12 +98,13 @@ class ezcReflectionProperty extends ReflectionProperty
      *
      * This method is part of the dependency injection mechanism and serves as
      * a helper for implementing wrapper methods without code duplication.
-     * @param string $method Name of the method to be invoked
-     * @param mixed[] $arguments Arguments to be passed to the method
-     * @return mixed Return value of the invoked method
+     * @param  string  $method    Name of the method to be invoked
+     * @param  mixed[] $arguments Arguments to be passed to the method
+     * @return mixed   Return value of the invoked method
      */
-    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
-        if ( $this->reflectionSource instanceof parent ) {
+    protected function forwardCallToReflectionSource( $method, $arguments = array() )
+    {
+        if ($this->reflectionSource instanceof parent) {
             return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
         } else {
             //*
@@ -117,6 +115,7 @@ class ezcReflectionProperty extends ReflectionProperty
                 $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+
             return eval( $cmd );
             //*/
         }
@@ -131,12 +130,9 @@ class ezcReflectionProperty extends ReflectionProperty
     public function getType()
     {
         $vars = $this->docParser->getVarAnnotations();
-        if ( isset( $vars[0] ) )
-        {
+        if ( isset( $vars[0] ) ) {
             return ezcReflection::getTypeByName( $vars[0]->getTypeName() );
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -148,13 +144,11 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function getDeclaringClass()
     {
-		if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             return new ezcReflectionClass( $this->reflectionSource->getDeclaringClass() );
-        }
-        else
-        {
+        } else {
             $class = parent::getDeclaringClass();
+
             return new ezcReflectionClass( $class->getName() );
         }
     }
@@ -162,31 +156,32 @@ class ezcReflectionProperty extends ReflectionProperty
     /**
      * Checks whether the property is annotated with the annotation $annotation
      *
-     * @param string $annotation Name of the annotation
+     * @param  string  $annotation Name of the annotation
      * @return boolean
      * @since PHP 5.1.0
      */
-    public function hasAnnotation($annotation) {
+    public function hasAnnotation($annotation)
+    {
         return $this->docParser->hasAnnotation($annotation);
     }
 
     /**
      * Returns an array of annotations (optinally only annotations of a given name)
      *
-     * @param string $name Name of the annotations
+     * @param  string                    $name Name of the annotations
      * @return ezcReflectionAnnotation[] Annotations
      * @since PHP 5.1.0
      */
-    public function getAnnotations($name = '') {
+    public function getAnnotations($name = '')
+    {
         if ($name == '') {
             return $this->docParser->getAnnotations();
-        }
-        else {
+        } else {
             return $this->docParser->getAnnotationsByName($name);
         }
     }
 
-	/**
+    /**
      * Returns the PHPDoc comment of the property.
      *
      * @return string PHPDoc comment
@@ -194,105 +189,89 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function getDocComment()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             // query external reflection object
             $comment = $this->reflectionSource->getDocComment();
-        }
-        else
-        {
+        } else {
             $comment = parent::getDocComment();
         }
+
         return $comment;
     }
 
-	/**
+    /**
      * Returns the name of the property.
      *
      * @return string property name
      */
     public function getName()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             $name = $this->reflectionSource->getName();
-        }
-        else
-        {
+        } else {
             $name = parent::getName();
         }
+
         return $name;
     }
 
-	/**
+    /**
      * Returns true if this property has public as access level.
      *
      * @return bool
      */
     public function isPublic()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             return $this->reflectionSource->isPublic();
-        }
-        else
-        {
+        } else {
             return parent::isPublic();
         }
     }
 
-	/**
+    /**
      * Returns true if this property has protected as access level.
      *
      * @return bool
      */
     public function isProtected()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             return $this->reflectionSource->isProtected();
-        }
-        else
-        {
+        } else {
             return parent::isProtected();
         }
     }
 
-	/**
+    /**
      * Returns true if this property has private as access level.
      *
      * @return bool
      */
     public function isPrivate()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             return $this->reflectionSource->isPrivate();
-        }
-        else
-        {
+        } else {
             return parent::isPrivate();
         }
     }
 
-	/**
+    /**
      * Returns true if this property has is a static property.
      *
      * @return bool
      */
     public function isStatic()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             return $this->reflectionSource->isStatic();
-        }
-        else
-        {
+        } else {
             return parent::isStatic();
         }
     }
 
-	/**
+    /**
      * Returns whether the property is a default property defined in the class.
      *
 	 * A default property is defined in the class definition.
@@ -301,17 +280,14 @@ class ezcReflectionProperty extends ReflectionProperty
      */
     public function isDefault()
     {
-        if ( $this->reflectionSource instanceof ReflectionProperty )
-        {
+        if ($this->reflectionSource instanceof ReflectionProperty) {
             return $this->reflectionSource->isDefault();
-        }
-        else
-        {
+        } else {
             return parent::isDefault();
         }
     }
 
-	/**
+    /**
      * Returns a bitfield of the access modifiers for this property.
      *
      * @return int
@@ -321,25 +297,25 @@ class ezcReflectionProperty extends ReflectionProperty
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
-	/**
+    /**
      * Returns the property's value.
      *
-     * @param object $object An object from which the property value is obtained
-     * @return mixed The property's value
+     * @param  object $object An object from which the property value is obtained
+     * @return mixed  The property's value
      */
-    public function getValue( $object = null )
+    public function getValue($object = null)
     {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object ) );
     }
 
-	/**
+    /**
      * Changes the property's value.
      *
-     * @param object $object An object on which the property value will be changed
-     * @param mixed $value Value of the property
+     * @param  object $object An object on which the property value will be changed
+     * @param  mixed  $value  Value of the property
      * @return void
      */
-    public function setValue( $object, $value = null )
+    public function setValue($object, $value = null)
     {
         return $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
     }
@@ -347,11 +323,11 @@ class ezcReflectionProperty extends ReflectionProperty
     /**
      * Sets whether non-public properties can be requested
      *
-     * @param boolean $value Whether non-public properties can be requested
+     * @param  boolean $value Whether non-public properties can be requested
      * @return void
      * @since PHP 5.3.0
      */
-    public function setAccessible( $value )
+    public function setAccessible($value)
     {
         $this->forwardCallToReflectionSource( __FUNCTION__, array( $object, $value ) );
     }
@@ -360,8 +336,9 @@ class ezcReflectionProperty extends ReflectionProperty
      * Returns a string representation
      * @return string
      */
-    public function __toString() {
-        if ( $this->reflectionSource ) {
+    public function __toString()
+    {
+        if ($this->reflectionSource) {
             return $this->reflectionSource->__toString();
         } else {
             return parent::__toString();
@@ -374,17 +351,17 @@ class ezcReflectionProperty extends ReflectionProperty
      * Returns the output if TRUE is specified for return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of
      * the parent class.
-     * @param ReflectionClass|string $class
-     *        ReflectionClass object or name of the class
-     * @param ReflectionProperty|string $property
-     *        ReflectionProperty object or name of the class
-     * @param boolean $return
-     *        Whether to return (TRUE) or print (FALSE) the output
+     * @param  ReflectionClass|string    $class
+     *                                             ReflectionClass object or name of the class
+     * @param  ReflectionProperty|string $property
+     *                                             ReflectionProperty object or name of the class
+     * @param  boolean                   $return
+     *                                             Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
-    public static function export($class, $property, $return = false) {
+    public static function export($class, $property, $return = false)
+    {
         return parent::export($class, $property, $return);
     }
 
 }
-?>

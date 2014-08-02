@@ -9,7 +9,8 @@
  * @param ReflectionClass $test3
  * @return string Hello World
  */
-function m1($test, $test2, &$test3) {
+function m1($test, $test2, &$test3)
+{
     return 'Hello World';
 }
 
@@ -23,7 +24,8 @@ weird coding standards should also be supported: */function m2() {
 
 }
 
-function m3() {
+function m3()
+{
     static $staticVar;
 }
 
@@ -37,11 +39,10 @@ function m3() {
  * Important: the nodes are not appended now, because the messages are not
  * created yet. That's why they are appended after the messages are created.
  */
-function m4() {
-
+function m4()
+{
 }
 
-function functionWithTypeHint( ReflectionClass $paramWithTypeHintOnly ) {
+function functionWithTypeHint(ReflectionClass $paramWithTypeHintOnly)
+{
 }
-
-?>

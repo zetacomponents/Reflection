@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -34,71 +34,79 @@ class ezcReflectionClassExternalTest extends ezcReflectionClassTest
         $this->classReflectionFunction = new ezcReflectionClass( new MyReflectionClass( 'ReflectionFunction' ) );
     }
 
-	public function testCall() {
-		self::assertTrue($this->class->doSomeMetaProgramming());
-	}
+    public function testCall()
+    {
+        self::assertTrue($this->class->doSomeMetaProgramming());
+    }
 
-	public function testGetMethod() {
-		parent::testGetMethod();
+    public function testGetMethod()
+    {
+        parent::testGetMethod();
 
-		$m = $this->class->getMethod('helloWorld');
-		self::assertTrue($m->change());
-	}
+        $m = $this->class->getMethod('helloWorld');
+        self::assertTrue($m->change());
+    }
 
-	public function testGetProperty() {
-		parent::testGetProperty();
+    public function testGetProperty()
+    {
+        parent::testGetProperty();
 
-		$prop = $this->class->getProperty('fields');
-		self::assertTrue($prop->change());
-	}
+        $prop = $this->class->getProperty('fields');
+        self::assertTrue($prop->change());
+    }
 
-	public function testGetProperties() {
-		parent::testGetProperties();
+    public function testGetProperties()
+    {
+        parent::testGetProperties();
 
-		$props = $this->class->getProperties();
-		self::assertTrue($props[0]->change());
-	}
+        $props = $this->class->getProperties();
+        self::assertTrue($props[0]->change());
+    }
 
-	public function testGetConstructor() {
-		parent::testGetConstructor();
+    public function testGetConstructor()
+    {
+        parent::testGetConstructor();
 
-		$ctr = $this->class->getConstructor();
-		self::assertTrue($ctr->change());
-	}
+        $ctr = $this->class->getConstructor();
+        self::assertTrue($ctr->change());
+    }
 
-	public function testGetMethods() {
-		parent::testGetMethods();
+    public function testGetMethods()
+    {
+        parent::testGetMethods();
 
-		$ms = $this->class->getMethods();
-		self::assertTrue($ms[0]->change());
-	}
+        $ms = $this->class->getMethods();
+        self::assertTrue($ms[0]->change());
+    }
 
-	public function testGetInterfaces() {
-		parent::testGetInterfaces();
+    public function testGetInterfaces()
+    {
+        parent::testGetInterfaces();
 
-		$is = $this->class->getInterfaces();
-		self::assertTrue($is[0]->change());
-	}
+        $is = $this->class->getInterfaces();
+        self::assertTrue($is[0]->change());
+    }
 
-	public function testGetParentClass() {
-		parent::testGetParentClass();
+    public function testGetParentClass()
+    {
+        parent::testGetParentClass();
 
-		$parent = $this->class->getParentClass();
-		self::assertTrue($parent->change());
-	}
+        $parent = $this->class->getParentClass();
+        self::assertTrue($parent->change());
+    }
 
-	public function testGetExtension() {
-		parent::testGetExtension();
+    public function testGetExtension()
+    {
+        parent::testGetExtension();
 
-		self::assertNull($this->class->getExtension());
-		$c = new ezcReflectionClass( new MyReflectionClass( 'ReflectionClass' ) );
-		$ext = $c->getExtension();
-		self::assertTrue($ext->change());
-	}
+        self::assertNull($this->class->getExtension());
+        $c = new ezcReflectionClass( new MyReflectionClass( 'ReflectionClass' ) );
+        $ext = $c->getExtension();
+        self::assertTrue($ext->change());
+    }
 
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionClassExternalTest" );
     }
 }
-?>

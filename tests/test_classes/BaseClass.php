@@ -1,11 +1,9 @@
 <?php
 
-class BaseClass {
-
+class BaseClass
+{
     public function doSomeMetaProgramming()
-	{
-		return true;
-	}
+    {
+        return true;
+    }
 }
-
-?>

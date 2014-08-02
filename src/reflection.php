@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,20 +32,20 @@
  * @author Stefan Marr <mail@stefan-marr.de>
  * @author Falko Menge <mail@falko-menge.de>
  */
-class ezcReflection {
-
-	/**
+class ezcReflection
+{
+    /**
 	 * @var ezcReflectionTypeFactory
 	 */
-	protected static $reflectionTypeFactory = null;
+    protected static $reflectionTypeFactory = null;
 
-	/**
+    /**
 	 * @var ezcReflectionDocCommentParser
      *      Current documentation parser used by all ezcReflection classes
 	 */
-	protected static $docParser = null;
+    protected static $docParser = null;
 
-	/**
+    /**
 	 * Don't allow objects, it is just a static factory
 	 */
     // @codeCoverageIgnoreStart
@@ -60,21 +60,22 @@ class ezcReflection {
      */
     public static function getDocCommentParser()
     {
-    	if ( !( self::$docParser instanceof ezcReflectionDocCommentParser ) ) {
-    		self::$docParser = new ezcReflectionDocCommentParserImpl();
-    	}
-    	return clone self::$docParser;
+        if ( !( self::$docParser instanceof ezcReflectionDocCommentParser ) ) {
+            self::$docParser = new ezcReflectionDocCommentParserImpl();
+        }
+
+        return clone self::$docParser;
     }
 
     /**
      * Sets the documentation parser used by all ezcReflection classes
      *
-     * @param ezcReflectionDocCommentParser $docParser Parser for documentation blocks
+     * @param  ezcReflectionDocCommentParser $docParser Parser for documentation blocks
      * @return void
      */
     public static function setDocCommentParser(ezcReflectionDocCommentParser $docParser)
     {
-    	self::$docParser = $docParser;
+        self::$docParser = $docParser;
     }
 
     /**
@@ -87,13 +88,14 @@ class ezcReflection {
         if ( !( self::$reflectionTypeFactory instanceof ezcReflectionTypeFactory ) ) {
             self::$reflectionTypeFactory = new ezcReflectionTypeFactoryImpl();
         }
-    	return clone self::$reflectionTypeFactory;
+
+        return clone self::$reflectionTypeFactory;
     }
 
     /**
      * Sets the factory used to create type objects
      *
-     * @param ezcReflectionTypeFactory $factory Factory for type objects
+     * @param  ezcReflectionTypeFactory $factory Factory for type objects
      * @return void
      */
     public static function setReflectionTypeFactory(ezcReflectionTypeFactory $factory)
@@ -104,7 +106,7 @@ class ezcReflection {
     /**
      * Returns a ezcReflectionType object for the given type name
      *
-     * @param string $typeName
+     * @param  string            $typeName
      * @return ezcReflectionType
      */
     public static function getTypeByName($typeName)
@@ -118,11 +120,13 @@ class ezcReflection {
      *
      * @return ezcReflectionClass[] all declared classes
      */
-    public static function getClasses() {
+    public static function getClasses()
+    {
         $classes = array();
-        foreach( get_declared_classes() as $className ) {
+        foreach ( get_declared_classes() as $className ) {
             $classes[$className] = new ezcReflectionClass( $className );
         }
+
         return $classes;
     }
 
@@ -132,11 +136,13 @@ class ezcReflection {
      *
      * @return ezcReflectionClass[] all declared interfaces
      */
-    public static function getInterfaces() {
+    public static function getInterfaces()
+    {
         $interfaces = array();
-        foreach( get_declared_interfaces() as $interfaceName ) {
+        foreach ( get_declared_interfaces() as $interfaceName ) {
             $interfaces[$interfaceName] = new ezcReflectionClass( $interfaceName );
         }
+
         return $interfaces;
     }
 
@@ -146,12 +152,14 @@ class ezcReflection {
      *
      * @return ezcReflectionFunction[] all user-defined functions
      */
-    public static function getUserDefinedFunctions() {
+    public static function getUserDefinedFunctions()
+    {
         $functions = array();
         $functionNames = get_defined_functions();
-        foreach( $functionNames['user'] as $functionName ) {
+        foreach ($functionNames['user'] as $functionName) {
             $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
+
         return $functions;
     }
 
@@ -161,12 +169,14 @@ class ezcReflection {
      *
      * @return ezcReflectionFunction[] all internal functions
      */
-    public static function getInternalFunctions() {
+    public static function getInternalFunctions()
+    {
         $functions = array();
         $functionNames = get_defined_functions();
-        foreach( $functionNames['internal'] as $functionName ) {
+        foreach ($functionNames['internal'] as $functionName) {
             $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
+
         return $functions;
     }
 
@@ -176,16 +186,17 @@ class ezcReflection {
      *
      * @return ezcReflectionFunction[] all internal and user-defined functions
      */
-    public static function getFunctions() {
+    public static function getFunctions()
+    {
         $functions = array();
         $functionNames = get_defined_functions();
-        foreach( $functionNames['internal'] as $functionName ) {
+        foreach ($functionNames['internal'] as $functionName) {
             $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
-        foreach( $functionNames['user'] as $functionName ) {
+        foreach ($functionNames['user'] as $functionName) {
             $functions[$functionName] = new ezcReflectionFunction( $functionName );
         }
+
         return $functions;
     }
 }
-?>

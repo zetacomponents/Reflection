@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -63,45 +63,42 @@ class ezcReflectionMethod extends ReflectionMethod
      * new ezcReflectionMethod( 'SomeClass',                        new ReflectionMethod( 'SomeClass', 'someMethod' ) );
      * new ezcReflectionMethod( new ReflectionClass( 'SomeClass' ), new ReflectionMethod( 'SomeClass', 'someMethod' ) );
      * </code>
-     * 
+     *
      * The following way of creating an ezcReflectionMethod results in the
      * current class being the declaring class, i.e., isInherited() and
      * isIntroduced() may not return the expected results:
      * <code>
      * new ezcReflectionMethod( new ReflectionMethod( 'SomeClass', 'someMethod' ) );
      * </code>
-     * 
+     *
      * @param string|ReflectionClass|ReflectionMethod $classOrSource
-     *        Name of class, ReflectionClass, or ReflectionMethod of the method
-     *        to be reflected
-     * @param string|ReflectionMethod $nameOrSource
-     *        Name or ReflectionMethod instance of the method to be reflected
-     *        Optional if $classOrSource is an instance of ReflectionMethod
+     *                                                               Name of class, ReflectionClass, or ReflectionMethod of the method
+     *                                                               to be reflected
+     * @param string|ReflectionMethod                 $nameOrSource
+     *                                                               Name or ReflectionMethod instance of the method to be reflected
+     *                                                               Optional if $classOrSource is an instance of ReflectionMethod
      */
-    public function __construct( $classOrSource, $nameOrSource = null ) {
-        if ( $nameOrSource instanceOf parent ) {
+    public function __construct($classOrSource, $nameOrSource = null)
+    {
+        if ($nameOrSource instanceof parent) {
             $this->reflectionSource = $nameOrSource;
-            if ( $classOrSource instanceof ReflectionClass ) {
+            if ($classOrSource instanceof ReflectionClass) {
                 $this->currentClass = $classOrSource;
-            }
-            else {
+            } else {
                 $this->currentClass = new ReflectionClass( (string) $classOrSource );
             }
-        }
-        elseif ( $classOrSource instanceof parent ) {
-    		$this->reflectionSource = $classOrSource;
+        } elseif ($classOrSource instanceof parent) {
+            $this->reflectionSource = $classOrSource;
             $this->currentClass = new ReflectionClass( $this->reflectionSource->class );
-    	}
-		elseif ( $classOrSource instanceof ReflectionClass ) {
-			parent::__construct( $classOrSource->getName(), $nameOrSource );
+        } elseif ($classOrSource instanceof ReflectionClass) {
+            parent::__construct( $classOrSource->getName(), $nameOrSource );
             $this->currentClass = $classOrSource;
-        }
-        else {
-			parent::__construct( $classOrSource, $nameOrSource );
+        } else {
+            parent::__construct( $classOrSource, $nameOrSource );
             $this->currentClass = new ReflectionClass( (string) $classOrSource );
         }
 
-		$this->docParser = ezcReflection::getDocCommentParser();
+        $this->docParser = ezcReflection::getDocCommentParser();
         $this->docParser->parse($this->getDocComment());
     }
 
@@ -109,21 +106,19 @@ class ezcReflectionMethod extends ReflectionMethod
      * Use overloading to call additional methods
      * of the ReflectionMethod instance given to the constructor.
      *
-     * @param string $method Method to be called
-     * @param array  $arguments Arguments that were passed
+     * @param  string $method    Method to be called
+     * @param  array  $arguments Arguments that were passed
      * @return mixed
      */
-    public function __call( $method, $arguments )
+    public function __call($method, $arguments)
     {
-        $callback = array( $this->reflectionSource, $method );  
+        $callback = array( $this->reflectionSource, $method );
         if ( $this->reflectionSource instanceof parent
              and is_callable( $callback ) )
         {
             // query external reflection object
             return call_user_func_array( $callback, $arguments );
-        }
-        else
-        {
+        } else {
             throw new ezcReflectionCallToUndefinedMethodException( __CLASS__, $method );
         }
     }
@@ -135,12 +130,13 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * This method is part of the dependency injection mechanism and serves as
      * a helper for implementing wrapper methods without code duplication.
-     * @param string $method Name of the method to be invoked
-     * @param mixed[] $arguments Arguments to be passed to the method
-     * @return mixed Return value of the invoked method
+     * @param  string  $method    Name of the method to be invoked
+     * @param  mixed[] $arguments Arguments to be passed to the method
+     * @return mixed   Return value of the invoked method
      */
-    protected function forwardCallToReflectionSource( $method, $arguments = array() ) {
-        if ( $this->reflectionSource instanceof parent ) {
+    protected function forwardCallToReflectionSource( $method, $arguments = array() )
+    {
+        if ($this->reflectionSource instanceof parent) {
             return call_user_func_array( array( $this->reflectionSource, $method ), $arguments );
         } else {
             //*
@@ -151,6 +147,7 @@ class ezcReflectionMethod extends ReflectionMethod
                 $argumentStrings[] = '$arguments[' . var_export( $key, true ) . ']';
             }
             $cmd = 'return parent::$method( ' . implode( ', ', $argumentStrings ) . ' );';
+
             return eval( $cmd );
             //*/
         }
@@ -162,10 +159,11 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return ezcReflectionParameter[] Parameters of the method
      * @since PHP 5.1.0
      */
-    function getParameters() {
+    public function getParameters()
+    {
         $params = $this->docParser->getParamAnnotations();
         $extParams = array();
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             $apiParams = $this->reflectionSource->getParameters();
         } else {
             $apiParams = parent::getParameters();
@@ -181,7 +179,7 @@ class ezcReflectionMethod extends ReflectionMethod
                     break;
                 }
             }
-            if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            if ($this->reflectionSource instanceof ReflectionMethod) {
                 $extParams[] = new ezcReflectionParameter(
                     null,
                     $param,
@@ -199,6 +197,7 @@ class ezcReflectionMethod extends ReflectionMethod
                 );
             }
         }
+
         return $extParams;
     }
 
@@ -208,11 +207,13 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return ezcReflectionType
      * @since PHP 5.1.0
      */
-    function getReturnType() {
+    public function getReturnType()
+    {
         $re = $this->docParser->getReturnAnnotations();
         if (count($re) == 1 and isset($re[0]) and $re[0] instanceof ezcReflectionAnnotationReturn) {
             return ezcReflection::getTypeByName($re[0]->getTypeName());
         }
+
         return null;
     }
 
@@ -222,11 +223,13 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return string
      * @since PHP 5.1.0
      */
-    function getReturnDescription() {
+    public function getReturnDescription()
+    {
         $re = $this->docParser->getReturnAnnotations();
         if (count($re) == 1 and isset($re[0])) {
             return $re[0]->getDescription();
         }
+
         return '';
     }
 
@@ -236,7 +239,8 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return string Short description
      * @since PHP 5.1.0
      */
-    public function getShortDescription() {
+    public function getShortDescription()
+    {
         return $this->docParser->getShortDescription();
     }
 
@@ -246,33 +250,35 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return string Long description
      * @since PHP 5.1.0
      */
-    public function getLongDescription() {
+    public function getLongDescription()
+    {
         return $this->docParser->getLongDescription();
     }
 
     /**
      * Checks whether the method is annotated with the annotation $annotation
      *
-     * @param string $annotation Name of the annotation
+     * @param  string  $annotation Name of the annotation
      * @return boolean True if the annotation exists for this method
      * @since PHP 5.1.0
      */
-    public function hasAnnotation($annotation) {
+    public function hasAnnotation($annotation)
+    {
         return $this->docParser->hasAnnotation($annotation);
     }
 
     /**
      * Returns an array of annotations (optinally only annotations of a given name)
      *
-     * @param string $name Name of the annotations
+     * @param  string                    $name Name of the annotations
      * @return ezcReflectionAnnotation[] Annotations
      * @since PHP 5.1.0
      */
-    public function getAnnotations($name = '') {
+    public function getAnnotations($name = '')
+    {
         if ($name == '') {
             return $this->docParser->getAnnotations();
-        }
-        else {
+        } else {
             return $this->docParser->getAnnotationsByName($name);
         }
     }
@@ -282,10 +288,12 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean
      */
-    function isMagic() {
+    public function isMagic()
+    {
         $magicArray =  array('__construct','__destruct','__call',
-        					 '__get','__set','__isset','__unset',
-        					 '__sleep','__wakeup','__toString','__clone');
+                             '__get','__set','__isset','__unset',
+                             '__sleep','__wakeup','__toString','__clone');
+
         return in_array($this->getName(), $magicArray);
     }
 
@@ -294,7 +302,8 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean
      */
-    function isInherited() {
+    public function isInherited()
+    {
         $declaringClass = $this->getDeclaringClass();
         if ( $declaringClass->getName() != $this->currentClass->getName() ) {
             return true;
@@ -308,7 +317,8 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean
      */
-    function isOverridden() {
+    public function isOverridden()
+    {
         $declaringClass = $this->getDeclaringClass();
         $parent = $this->currentClass->getParentClass();
         if (
@@ -327,7 +337,8 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean
      */
-    function isIntroduced() {
+    public function isIntroduced()
+    {
         return !$this->isInherited() and !$this->isOverridden();
     }
 
@@ -337,7 +348,8 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return ezcReflectionClass Class of the reflected method
      */
-    function getCurrentClass() {
+    public function getCurrentClass()
+    {
         return $this->currentClass;
     }
 
@@ -346,18 +358,18 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return ezcReflectionClass Class declaring the method
      */
-    function getDeclaringClass() {
-        if ( $this->reflectionSource ) {
+    public function getDeclaringClass()
+    {
+        if ($this->reflectionSource) {
             $class = $this->reflectionSource->getDeclaringClass();
         } else {
             $class = parent::getDeclaringClass();
         }
-		if (!empty($class)) {
-		    return new ezcReflectionClass( $class->getName() );
-		}
-		else {
-		    return null;
-		}
+        if (!empty($class)) {
+            return new ezcReflectionClass( $class->getName() );
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -385,9 +397,9 @@ class ezcReflectionMethod extends ReflectionMethod
             $lines = array_slice( file( $filename ), $offset, $length );
             $code = implode( '', $lines );
         }
+
         return $code;
     }
-
 
     // the following methods do not contain additional features
     // they just call the parent method or the reflection source
@@ -398,7 +410,8 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return string Doc comment
      * @since PHP 5.1.0
      */
-    public function getDocComment() {
+    public function getDocComment()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -407,24 +420,26 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return string Filename of the file this function was declared in
      */
-    public function getFileName() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
-    		return $this->reflectionSource->getFileName();
-    	} else {
-    		return parent::getFileName();
-    	}
+    public function getFileName()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
+            return $this->reflectionSource->getFileName();
+        } else {
+            return parent::getFileName();
+        }
     }
 
     /**
      * Name of the method
      * @return string
      */
-    public function getName() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
-    		return $this->reflectionSource->getName();
-    	} else {
-    		return parent::getName();
-    	}
+    public function getName()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
+            return $this->reflectionSource->getName();
+        } else {
+            return parent::getName();
+        }
     }
 
     /**
@@ -432,12 +447,13 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean True if this is an internal method
      */
-    public function isInternal() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
-    		return $this->reflectionSource->isInternal();
-    	} else {
-    		return parent::isInternal();
-    	}
+    public function isInternal()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
+            return $this->reflectionSource->isInternal();
+        } else {
+            return parent::isInternal();
+        }
     }
 
     /**
@@ -445,8 +461,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return integer Line this methods's declaration starts at
      */
-    public function getStartLine() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getStartLine()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getStartLine();
         } else {
             return parent::getStartLine();
@@ -458,8 +475,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return integer Line this methods's declaration ends at
      */
-    public function getEndLine() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getEndLine()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getEndLine();
         } else {
             return parent::getEndLine();
@@ -469,14 +487,15 @@ class ezcReflectionMethod extends ReflectionMethod
     /**
      * Invokes the method on a given object
      *
-     * @param object $object      Instance of the class defining this method
-     * @param mixed $argument,... Arguments for the method
-     * @return mixed              Return value of the method invocation
+     * @param  object $object       Instance of the class defining this method
+     * @param  mixed  $argument,... Arguments for the method
+     * @return mixed  Return value of the method invocation
      */
-    public function invoke( $object, $arguments ) {
+    public function invoke($object, $arguments)
+    {
         $arguments = func_get_args();
         $object = array_shift( $arguments );
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             // doesn't work: return call_user_func_array( array( $this->reflectionSource, 'invoke' ), array_unshift( $arguments, $object ) );
             // but hopefully the methods invoke and invokeArgs of
             // the external ReflectionMethod implementation are semantically the same
@@ -492,16 +511,17 @@ class ezcReflectionMethod extends ReflectionMethod
     /**
      * Invokes the Method and allows to pass its arguments as an array
      *
-     * @param object $object
-     *        Instance of the class defining this method
-     * @param array<integer,mixed> $arguments
-     *        Arguments
+     * @param  object               $object
+     *                                         Instance of the class defining this method
+     * @param  array<integer,mixed> $arguments
+     *                                         Arguments
      * @return mixed
-     *         Return value of the method invocation
+     *                                        Return value of the method invocation
      * @since PHP 5.1.0
      */
-    public function invokeArgs( $object, Array $arguments ) {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function invokeArgs($object, array $arguments)
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->invokeArgs( $object, $arguments );
         } else {
             return parent::invokeArgs( $object, $arguments );
@@ -514,8 +534,9 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return integer The number of parameters
      * @since PHP 5.0.3
      */
-    public function getNumberOfParameters() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getNumberOfParameters()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getNumberOfParameters();
         } else {
             return parent::getNumberOfParameters();
@@ -528,8 +549,9 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return integer The number of required parameters
      * @since PHP 5.0.3
      */
-    public function getNumberOfRequiredParameters() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getNumberOfRequiredParameters()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getNumberOfRequiredParameters();
         } else {
             return parent::getNumberOfRequiredParameters();
@@ -541,8 +563,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is final
      */
-    public function isFinal() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isFinal()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isFinal();
         } else {
             return parent::isFinal();
@@ -554,8 +577,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is abstract
      */
-    public function isAbstract() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isAbstract()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isAbstract();
         } else {
             return parent::isAbstract();
@@ -567,8 +591,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is public
      */
-    public function isPublic() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isPublic()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isPublic();
         } else {
             return parent::isPublic();
@@ -580,8 +605,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is private
      */
-    public function isPrivate() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isPrivate()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isPrivate();
         } else {
             return parent::isPrivate();
@@ -593,8 +619,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is protected
      */
-    public function isProtected() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isProtected()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isProtected();
         } else {
             return parent::isProtected();
@@ -606,8 +633,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is static
      */
-    public function isStatic() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isStatic()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isStatic();
         } else {
             return parent::isStatic();
@@ -619,8 +647,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is a constructor
      */
-    public function isConstructor() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isConstructor()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isConstructor();
         } else {
             return parent::isConstructor();
@@ -632,8 +661,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean TRUE if this method is a destructor
      */
-    public function isDestructor() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isDestructor()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isDestructor();
         } else {
             return parent::isDestructor();
@@ -645,8 +675,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return integer Bitfield of the access modifiers for this method
      */
-    public function getModifiers() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getModifiers()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getModifiers();
         } else {
             return parent::getModifiers();
@@ -658,8 +689,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return string String representation
      */
-    public function __toString() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function __toString()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->__toString();
         } else {
             return parent::__toString();
@@ -671,8 +703,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean True if this is a user-defined method
      */
-    public function isUserDefined() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function isUserDefined()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->isUserDefined();
         } else {
             return parent::isUserDefined();
@@ -685,8 +718,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return array<sting,mixed> This method's static variables
      */
-    public function getStaticVariables() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getStaticVariables()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getStaticVariables();
         } else {
             return parent::getStaticVariables();
@@ -698,8 +732,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return boolean True if this method returns a reference
      */
-    public function returnsReference() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function returnsReference()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->returnsReference();
         } else {
             return parent::returnsReference();
@@ -711,11 +746,12 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return ezcReflectionExtension Extension the method belongs to
      */
-    public function getExtension() {
+    public function getExtension()
+    {
         if ( $this->getExtensionName() === false ) {
             return null;
         } else {
-            if ( $this->reflectionSource instanceof ReflectionMethod ) {
+            if ($this->reflectionSource instanceof ReflectionMethod) {
                 return new ezcReflectionExtension(
                     $this->reflectionSource->getExtension()
                 );
@@ -732,8 +768,9 @@ class ezcReflectionMethod extends ReflectionMethod
      *
      * @return string|boolean False or the name of the extension
      */
-    public function getExtensionName() {
-        if ( $this->reflectionSource instanceof ReflectionMethod ) {
+    public function getExtensionName()
+    {
+        if ($this->reflectionSource instanceof ReflectionMethod) {
             return $this->reflectionSource->getExtensionName();
         } else {
             return parent::getExtensionName();
@@ -747,9 +784,10 @@ class ezcReflectionMethod extends ReflectionMethod
      * the parent class.
      * @return boolean
      */
-    public function isDeprecated() {
+    public function isDeprecated()
+    {
         // TODO: also check @deprecated annotation
-        if ( $this->reflectionSource instanceof parent ) {
+        if ($this->reflectionSource instanceof parent) {
             return $this->reflectionSource->isDeprecated();
         } else {
             return parent::isDeprecated();
@@ -762,16 +800,18 @@ class ezcReflectionMethod extends ReflectionMethod
      * This is mostly a wrapper method, which calls the corresponding method of
      * the parent class. The only difference is that it returns an instance
      * ezcReflectionClass instead of a ReflectionClass instance
-     * @return ezcReflectionClass Prototype
+     * @return ezcReflectionClass  Prototype
      * @throws ReflectionException if the method has no prototype
      */
-    public function getPrototype() {
-        if ( $this->reflectionSource instanceof parent ) {
+    public function getPrototype()
+    {
+        if ($this->reflectionSource instanceof parent) {
             $prototype = $this->reflectionSource->getPrototype();
         } else {
             $prototype = parent::getPrototype();
         }
-	    return new ezcReflectionClass( $prototype->getName() );
+
+        return new ezcReflectionClass( $prototype->getName() );
     }
 
     /**
@@ -783,7 +823,8 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return string The name of namespace where this method is defined
      * @since PHP 5.3.0
      */
-    public function getNamespaceName() {
+    public function getNamespaceName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -796,7 +837,8 @@ class ezcReflectionMethod extends ReflectionMethod
      * @return boolean Whether this method is defined in a namespace
      * @since PHP 5.3.0
      */
-    public function inNamespace() {
+    public function inNamespace()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -807,10 +849,11 @@ class ezcReflectionMethod extends ReflectionMethod
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
      * @return string
-     *         Returns the short name of the method (without namespace part)
+     *                Returns the short name of the method (without namespace part)
      * @since PHP 5.3.0
      */
-    public function getShortName() {
+    public function getShortName()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -820,10 +863,11 @@ class ezcReflectionMethod extends ReflectionMethod
      * This is purely a wrapper method, which either calls the corresponding
      * method of the parent class or forwards the call to the ReflectionClass
      * instance passed to the constructor.
-     * @return boolean Whether this is a closure 
+     * @return boolean Whether this is a closure
      * @since PHP 5.3.0
      */
-    public function isClosure() {
+    public function isClosure()
+    {
         return $this->forwardCallToReflectionSource( __FUNCTION__ );
     }
 
@@ -833,17 +877,17 @@ class ezcReflectionMethod extends ReflectionMethod
      * Returns the output if TRUE is specified for $return, printing it otherwise.
      * This is purely a wrapper method, which calls the corresponding method of
      * the parent class (ReflectionMethod::export()).
-     * @param string|object $class
-     *        Name or instance of the class declaring the method
-     * @param string $name
-     *        Name of the method
-     * @param boolean $return
-     *        Whether to return (TRUE) or print (FALSE) the output
+     * @param  string|object $class
+     *                               Name or instance of the class declaring the method
+     * @param  string        $name
+     *                               Name of the method
+     * @param  boolean       $return
+     *                               Whether to return (TRUE) or print (FALSE) the output
      * @return mixed
      */
-    public static function export($class, $name, $return = false) {
+    public static function export($class, $name, $return = false)
+    {
         return parent::export($class, $name, $return);
     }
 
 }
-?>

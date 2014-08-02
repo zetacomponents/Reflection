@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -50,7 +50,8 @@ class ezcReflectionParameterTest extends ezcTestCase
     protected $actualParamsOf_functionWithTypeHint;
     /**#@-*/
 
-    public function setUp() {
+    public function setUp()
+    {
         // function with three parameters that have type annotations but no type hints
         //$this->expectedFunctionM1 = new ReflectionFunction( 'm1' );
         //$this->expectedParamsOfM1 = $this->expectedFunctionM1->getParameters();
@@ -59,7 +60,7 @@ class ezcReflectionParameterTest extends ezcTestCase
         //$this->expectedMethod_TestMethods_m3 = new ReflectionMethod( 'TestMethods', 'm3' );
         //$this->expectedParamsOfMethod_TestMethods_m3 = $this->expectedMethod_TestMethods_m3->getParameters();
 
-        $this->expected = $this->getExpectedFixtures(); 
+        $this->expected = $this->getExpectedFixtures();
         $this->setUpFixtures();
         $this->actual['m1'] = $this->actualParamsOfM1;
         $this->actual['TestMethods::m3'] = $this->actualParamsOf_TestMethods_m3;
@@ -67,13 +68,14 @@ class ezcReflectionParameterTest extends ezcTestCase
         $this->actual['functionWithTypeHint'] = $this->actualParamsOf_functionWithTypeHint;
     }
 
-    public function setUpFixtures() {
+    public function setUpFixtures()
+    {
         // function with undocumented parameter $t that has default value 'foo'
         $this->actual['mmm'][0] = new ezcReflectionParameter( 'mmm', 0 );
 
         // function with three parameters that have type annotations but no type hints
         $paramTypes = array( 'string', 'ezcReflection', 'ReflectionClass' );
-        for ( $i = 0; $i <= 2; ++$i ) {
+        for ($i = 0; $i <= 2; ++$i) {
             $this->actualParamsOfM1[$i]
                 = new ezcReflectionParameter( 'm1', $i, $paramTypes[$i] );
         }
@@ -90,8 +92,9 @@ class ezcReflectionParameterTest extends ezcTestCase
         $this->actualParamsOf_functionWithTypeHint[]
             = new ezcReflectionParameter( 'functionWithTypeHint', 0, 'ReflectionClass' );
     }
-    
-    public function getExpectedFixtures() {
+
+    public function getExpectedFixtures()
+    {
         $expected = array();
 
         // function with undocumented parameter $t that has default value 'foo'
@@ -99,7 +102,7 @@ class ezcReflectionParameterTest extends ezcTestCase
 
         // function with three parameters that have type annotations but no type hints
         $paramTypes = array( 'string', 'ezcReflection', 'ReflectionClass' );
-        for ( $i = 0; $i <= 2; ++$i ) {
+        for ($i = 0; $i <= 2; ++$i) {
             $expected['m1'][$i]
                 = new ReflectionParameter( 'm1', $i );
         }
@@ -119,7 +122,8 @@ class ezcReflectionParameterTest extends ezcTestCase
         return $expected;
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->expected = array();
         $this->actual = array();
         unset(
@@ -130,7 +134,8 @@ class ezcReflectionParameterTest extends ezcTestCase
         );
     }
 
-    public function testGetType() {
+    public function testGetType()
+    {
         $type = $this->actualParamsOfM1[0]->getType();
         self::assertInstanceOf('ezcReflectionType', $type);
         self::assertEquals('string', $type->getTypeName());
@@ -156,7 +161,8 @@ class ezcReflectionParameterTest extends ezcTestCase
         self::assertNull($this->actualParamsOf_TestMethods_m3[0]->getType());
     }
 
-    public function testGetClass() {
+    public function testGetClass()
+    {
         self::assertNull( $this->actualParamsOfM1[0]->getClass() );
         self::assertNull( $this->actualParamsOfM1[1]->getClass() );
         self::assertNull( $this->actualParamsOfM1[2]->getClass() );
@@ -165,18 +171,19 @@ class ezcReflectionParameterTest extends ezcTestCase
             $this->actualParamsOf_ezcReflection_setReflectionTypeFactory[0]->getClass()->getName() );
     }
 
-    public function testGetDeclaringFunction() {
+    public function testGetDeclaringFunction()
+    {
         $params = $this->actualParamsOfM1;
 
-		$decFunc = $params[0]->getDeclaringFunction();
-		self::assertTrue($decFunc instanceof ezcReflectionFunction);
+        $decFunc = $params[0]->getDeclaringFunction();
+        self::assertTrue($decFunc instanceof ezcReflectionFunction);
         self::assertEquals('m1', $decFunc->getName());
 
         $decFunc = $this->actual['TestMethods::m3'][0]->getDeclaringFunction();
         self::assertInstanceOf('ezcReflectionMethod', $decFunc);
         self::assertEquals('TestMethods', $decFunc->getDeclaringClass()->getName());
         self::assertEquals('m3', $decFunc->getName());
-        
+
         $decFunc = $this->actual['ezcReflection::setReflectionTypeFactory'][0]->getDeclaringFunction();
         self::assertInstanceOf('ezcReflectionMethod', $decFunc);
         self::assertEquals('ezcReflection', $decFunc->getDeclaringClass()->getName());
@@ -187,94 +194,107 @@ class ezcReflectionParameterTest extends ezcTestCase
         self::assertEquals('functionWithTypeHint', $decFunc->getName());
     }
 
-    public function testGetDeclaringClass() {
+    public function testGetDeclaringClass()
+    {
         $params = $this->actualParamsOf_TestMethods_m3;
 
         $class = $params[0]->getDeclaringClass();
-		self::assertTrue($class instanceof ezcReflectionClass);
+        self::assertTrue($class instanceof ezcReflectionClass);
         self::assertEquals('TestMethods', $class->getName());
 
         self::assertNull( $this->actual['mmm'][0]->getDeclaringClass() );
     }
 
-    public function testGetName() {
+    public function testGetName()
+    {
         self::assertEquals('test', $this->actualParamsOfM1[0]->getName());
         self::assertEquals('test2', $this->actualParamsOfM1[1]->getName());
         self::assertEquals('test3', $this->actualParamsOfM1[2]->getName());
-	}
+    }
 
-    public function testIsPassedByReference() {
+    public function testIsPassedByReference()
+    {
         $params = $this->actualParamsOfM1;
-		self::assertFalse($params[0]->isPassedByReference());
-		self::assertTrue($params[2]->isPassedByReference());
-	}
+        self::assertFalse($params[0]->isPassedByReference());
+        self::assertTrue($params[2]->isPassedByReference());
+    }
 
-    public function testIsArray() {
+    public function testIsArray()
+    {
         $params = $this->actualParamsOfM1;
-		self::assertFalse($params[0]->isArray());
-	}
+        self::assertFalse($params[0]->isArray());
+    }
 
-    public function testAllowsNull() {
+    public function testAllowsNull()
+    {
         $params = $this->actualParamsOfM1;
-		self::assertTrue($params[0]->allowsNull());
-	}
+        self::assertTrue($params[0]->allowsNull());
+    }
 
-    public function testIsOptional() {
-		$param = $this->actual['mmm'][0];
-		self::assertTrue($param->isOptional());
-
-        $params = $this->actualParamsOfM1;
-		$param = $params[0];
-		self::assertFalse($param->isOptional());
-	}
-
-	public function testIsDefaultValueAvailable() {
-		$param = $this->actual['mmm'][0];
-		self::assertTrue($param->isDefaultValueAvailable());
+    public function testIsOptional()
+    {
+        $param = $this->actual['mmm'][0];
+        self::assertTrue($param->isOptional());
 
         $params = $this->actualParamsOfM1;
-		$param = $params[0];
-		self::assertFalse($param->isDefaultValueAvailable());
-	}
+        $param = $params[0];
+        self::assertFalse($param->isOptional());
+    }
 
-	public function testGetDefaultValue() {
-		$param = $this->actual['mmm'][0];
-		self::assertEquals('foo', $param->getDefaultValue());
-	}
+    public function testIsDefaultValueAvailable()
+    {
+        $param = $this->actual['mmm'][0];
+        self::assertTrue($param->isDefaultValueAvailable());
 
-	/**
+        $params = $this->actualParamsOfM1;
+        $param = $params[0];
+        self::assertFalse($param->isDefaultValueAvailable());
+    }
+
+    public function testGetDefaultValue()
+    {
+        $param = $this->actual['mmm'][0];
+        self::assertEquals('foo', $param->getDefaultValue());
+    }
+
+    /**
      * @expectedException ReflectionException
      */
-	public function testGetDefaultValueThrowsReflectionException() {
+    public function testGetDefaultValueThrowsReflectionException()
+    {
         $params = $this->actualParamsOfM1;
-		$param = $params[0];
-		self::assertEquals(null, $param->getDefaultValue()); //should throw exception
-	}
+        $param = $params[0];
+        self::assertEquals(null, $param->getDefaultValue()); //should throw exception
+    }
 
-	public function testGetPosition() {
-		$param = $this->actual['mmm'][0];
-		self::assertEquals(0, $param->getPosition());
+    public function testGetPosition()
+    {
+        $param = $this->actual['mmm'][0];
+        self::assertEquals(0, $param->getPosition());
 
         $params = $this->actualParamsOfM1;
-		$param = $params[1];
-		self::assertEquals(1, $param->getPosition());
-	}
+        $param = $params[1];
+        self::assertEquals(1, $param->getPosition());
+    }
 
-    public function getFunctionNamesAndParamKeys() {
+    public function getFunctionNamesAndParamKeys()
+    {
         $result = array();
         foreach ( $this->getExpectedFixtures() as $functionName => $expParams ) {
-            foreach ( $expParams as $paramKey => $expParam ) {
+            foreach ($expParams as $paramKey => $expParam) {
                 $result[]
                     = array( $functionName, $expParam->getPosition() );
             }
         }
+
         return $result;
     }
 
     /**
      * @dataProvider getFunctionNamesAndParamKeys
      */
-    public function testExport( $functionName = null, $paramKey = null ) {
+    public function testExport($functionName = null, $paramKey = null)
+    {
         if ( strpos( $functionName, '::' ) !== false ) {
             $function = explode( '::', $functionName );
         } else {
@@ -286,7 +306,8 @@ class ezcReflectionParameterTest extends ezcTestCase
         );
     }
 
-    public function getWrapperMethods() {
+    public function getWrapperMethods()
+    {
         $wrapperMethods = array(
             array( '__toString', array() ),
             array( 'getName', array() ),
@@ -302,15 +323,17 @@ class ezcReflectionParameterTest extends ezcTestCase
             array( 'getDeclaringFunction', array() ),
             array( 'getDeclaringClass', array() ),
         );
+
         return $wrapperMethods;
     }
 
     /**
      * @dataProvider getWrapperMethods
      */
-    public function testWrapperMethods( $method, $arguments ) {
-        foreach ( $this->expected as $functionName => $expParams ) {
-            foreach ( $expParams as $paramKey => $expParam ) {
+    public function testWrapperMethods($method, $arguments)
+    {
+        foreach ($this->expected as $functionName => $expParams) {
+            foreach ($expParams as $paramKey => $expParam) {
                 try {
                     $actual = call_user_func_array(
                         array( $this->actual[ $functionName ][ $paramKey ], $method ), $arguments
@@ -318,7 +341,7 @@ class ezcReflectionParameterTest extends ezcTestCase
                     $expected = call_user_func_array(
                         array( $this->expected[ $functionName ][ $paramKey ], $method ), $arguments
                     );
-                    if ( $expected instanceOf Reflector ) {
+                    if ($expected instanceof Reflector) {
                         self::assertEquals( (string) $expected, (string) $actual );
                     } else {
                         self::assertEquals( $expected, $actual );
@@ -341,4 +364,3 @@ class ezcReflectionParameterTest extends ezcTestCase
          return new PHPUnit_Framework_TestSuite( "ezcReflectionParameterTest" );
     }
 }
-?>

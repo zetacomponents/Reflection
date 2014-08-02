@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,8 @@
 
 class ezcReflectionFunctionExternalTest extends ezcReflectionFunctionTest
 {
-    public function setUp() {
+    public function setUp()
+    {
         $this->php_fctM1 = new ReflectionFunction( 'm1' );
         $this->php_fctM2 = new ReflectionFunction( 'm2' );
         $this->php_fctM3 = new ReflectionFunction( 'm3' );
@@ -38,16 +39,16 @@ class ezcReflectionFunctionExternalTest extends ezcReflectionFunctionTest
         $this->fct_method_exists = new ezcReflectionFunction( new MyReflectionFunction( 'method_exists' ) );
     }
 
-	public function testCall() {
-		self::assertTrue($this->fctM1->doSomeMetaProgramming());
-		self::assertTrue($this->fctM2->doSomeMetaProgramming());
-		self::assertTrue($this->fctM3->doSomeMetaProgramming());
-		self::assertTrue($this->fct_method_exists->doSomeMetaProgramming());
-	}
-    
+    public function testCall()
+    {
+        self::assertTrue($this->fctM1->doSomeMetaProgramming());
+        self::assertTrue($this->fctM2->doSomeMetaProgramming());
+        self::assertTrue($this->fctM3->doSomeMetaProgramming());
+        self::assertTrue($this->fct_method_exists->doSomeMetaProgramming());
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionFunctionExternalTest" );
     }
 }
-?>

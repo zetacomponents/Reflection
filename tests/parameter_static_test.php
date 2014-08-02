@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,8 @@
 
 class ezcReflectionParameterStaticTest extends ezcReflectionParameterTest
 {
-    public function setUpFixtures() {
+    public function setUpFixtures()
+    {
         $session = new pdepend\reflection\ReflectionSession();
         $array = array(
             'TestMethods' => dirname( __FILE__ ) . '/test_classes/methods.php',
@@ -43,16 +44,15 @@ class ezcReflectionParameterStaticTest extends ezcReflectionParameterTest
             new pdepend\reflection\factories\InternalReflectionClassFactory()
         );
 
-
         // function with undocumented parameter $t that has default value 'foo'
         // Functions are not yet supported in staticReflection, thus using ezcReflection again
-        foreach ( $this->expected['mmm'] as $key => $param ) {
+        foreach ($this->expected['mmm'] as $key => $param) {
             $this->actual['mmm'][$key] = new ezcReflectionParameter( null, $param );
         }
 
         // function with three parameters that have type annotations but no type hints
         $paramTypes = array( 'string', 'ezcReflection', 'ReflectionClass' );
-        foreach ( $this->expected['m1'] as $key => $param ) {
+        foreach ($this->expected['m1'] as $key => $param) {
             $this->actualParamsOfM1[] =
                 new ezcReflectionParameter( null, $param, $paramTypes[$key] );
         }
@@ -76,7 +76,8 @@ class ezcReflectionParameterStaticTest extends ezcReflectionParameterTest
         $this->actualParamsOf_functionWithTypeHint[] = new ezcReflectionParameter( 'ReflectionClass', $this->expected['functionWithTypeHint'][0] );
     }
 
-    public function testExport( $functionName = null, $paramKey = null ) {
+    public function testExport($functionName = null, $paramKey = null)
+    {
         // no need to test this again
     }
 

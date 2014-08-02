@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -44,7 +44,7 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
     /**
      * @param string $typeName
      */
-    public function __construct( $typeName )
+    public function __construct($typeName)
     {
         $this->typeName = ezcReflectionTypeMapper::getInstance()->getTypeName( $typeName );
     }
@@ -91,13 +91,13 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
 
     /**
      * Returns whether this type is one of integer, float, string, or boolean.
-     * 
+     *
      * Types array, object, resource, NULL, mixed, number, and callback are not
      * scalar.
-     * 
+     *
      * @return boolean
      */
-    function isScalarType()
+    public function isScalarType()
     {
         return false;
     }
@@ -108,15 +108,17 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
      * The prefix `xsd' is comonly used to refer to the
      * XML Schema namespace.
      *
-     * @param boolean $usePrefix augments common prefix `xsd:' to the name
+     * @param  boolean $usePrefix augments common prefix `xsd:' to the name
      * @return string
      */
-    function getXmlName($usePrefix = true) {
+    public function getXmlName($usePrefix = true)
+    {
         if ($usePrefix) {
             $prefix = 'xsd:';
         } else {
             $prefix = '';
         }
+
         return $prefix . ezcReflectionTypeMapper::getInstance()->getXmlType( $this->getTypeName() );
     }
 
@@ -124,7 +126,8 @@ abstract class ezcReflectionAbstractType implements ezcReflectionType
      * @param  DOMDocument $dom
      * @return DOMElement
      */
-    function getXmlSchema(DOMDocument $dom) {
+    public function getXmlSchema(DOMDocument $dom)
+    {
         return null;
     }
 
