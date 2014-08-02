@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,46 +31,41 @@
  * @version //autogen//
  * @author Falko Menge <mail@falko-menge.de>
  */
-class ezcReflectionMixedType extends ezcReflectionAbstractType {
-
+class ezcReflectionMixedType extends ezcReflectionAbstractType
+{
     /**
      * @var ezcReflectionType[]
      */
     protected $types;
-    
+
     /**
      * Returns a list of types
-     * 
+     *
      * @return ezcReflectionType[]
      */
     public function getTypes()
     {
-        if ( is_null( $this->types ) )
-        {
+        if ( is_null( $this->types ) ) {
             $typeName = parent::getTypeName();
-            if ( $typeName == ezcReflectionTypeMapper::CANONICAL_NAME_NUMBER )
-            {
+            if ($typeName == ezcReflectionTypeMapper::CANONICAL_NAME_NUMBER) {
                 $this->types = array(
                     ezcReflection::getTypeByName( ezcReflectionTypeMapper::CANONICAL_NAME_INTEGER ),
                     ezcReflection::getTypeByName( ezcReflectionTypeMapper::CANONICAL_NAME_FLOAT ),
                 );
-            }
-            elseif ( $typeName == ezcReflectionTypeMapper::CANONICAL_NAME_CALLBACK )
-            {
+            } elseif ($typeName == ezcReflectionTypeMapper::CANONICAL_NAME_CALLBACK) {
                 $this->types = array(
                     ezcReflection::getTypeByName( ezcReflectionTypeMapper::CANONICAL_NAME_STRING ),
                     ezcReflection::getTypeByName( 'mixed[]' ), // TODO Change this to 'array(integer=>object|string)'
                     ezcReflection::getTypeByName( 'Closure' ),
                 );
-            }
-            else
-            {
+            } else {
                 $this->types = array();
             }
         }
+
         return $this->types;
     }
-    
+
     /**
      * Return the name of this type as string
      *
@@ -85,18 +80,16 @@ class ezcReflectionMixedType extends ezcReflectionAbstractType {
         )
         {
             $types = $this->getTypes();
-            if ( !empty( $types ) )
-            {
+            if ( !empty( $types ) ) {
                 $typeName = '';
-                foreach ( $types as $type )
-                {
+                foreach ($types as $type) {
                     $typeName .= $type->getTypeName() . '|';
                 }
                 $typeName = substr( $typeName, 0, -1 ); // remove last '|'
             }
         }
+
         return $typeName;
     }
 
 }
-?>

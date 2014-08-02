@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,8 +27,9 @@
 
 class ezcReflectionMethodExternalTest extends ezcReflectionMethodTest
 {
-    
-    protected function setUpFixtures() {
+
+    protected function setUpFixtures()
+    {
         $this->fctM1 = new ezcReflectionMethod( 'TestMethods', new MyReflectionMethod( 'TestMethods', 'm1' ) );
         $this->fctM2 = new ezcReflectionMethod( 'TestMethods', new MyReflectionMethod( 'TestMethods', 'm2' ) );
         $this->fctM3 = new ezcReflectionMethod( 'TestMethods', new MyReflectionMethod( 'TestMethods', 'm3' ) );
@@ -44,17 +45,17 @@ class ezcReflectionMethodExternalTest extends ezcReflectionMethodTest
         $this->ezc_ezcReflectionMethod_isInherited = new ezcReflectionMethod( 'ezcReflectionMethod', new MyReflectionMethod( 'ezcReflectionMethod', 'isInherited' ) );
         $this->ezc_ezcReflectionMethod_getAnnotations = new ezcReflectionMethod( 'ezcReflectionMethod', new MyReflectionMethod( 'ezcReflectionMethod', 'getAnnotations' ) );
     }
-    
-	public function testCall() {
-		self::assertTrue($this->fctM1->doSomeMetaProgramming());
-		self::assertTrue($this->fctM2->doSomeMetaProgramming());
-		self::assertTrue($this->fctM3->doSomeMetaProgramming());
-		self::assertTrue($this->fct_method_exists->doSomeMetaProgramming());
-	}
-    
+
+    public function testCall()
+    {
+        self::assertTrue($this->fctM1->doSomeMetaProgramming());
+        self::assertTrue($this->fctM2->doSomeMetaProgramming());
+        self::assertTrue($this->fctM3->doSomeMetaProgramming());
+        self::assertTrue($this->fct_method_exists->doSomeMetaProgramming());
+    }
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionMethodExternalTest" );
     }
 }
-?>

@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -31,8 +31,8 @@
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-interface ezcReflectionType {
-
+interface ezcReflectionType
+{
     /**
      * @return boolean
      */
@@ -62,10 +62,10 @@ interface ezcReflectionType {
 
     /**
      * Returns whether this type is one of integer, float, string, or boolean.
-     * 
+     *
      * Types array, object, resource, NULL, mixed, number, and callback are not
      * scalar.
-     * 
+     *
      * @return boolean
      */
     public function isScalarType();
@@ -91,4 +91,3 @@ interface ezcReflectionType {
     public function __toString();
 
 }
-?>

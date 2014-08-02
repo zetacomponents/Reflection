@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -59,8 +59,7 @@ class ezcReflectionClassStaticTest extends ezcReflectionClassTest
         /*
         $query = $session->createDirectoryQuery();
         $query->find( dirname( __FILE__ ) . '/test_classes' );
-        foreach ( $query->find( dirname( __FILE__ ) . '/test_classes' ) as $class )
-        {
+        foreach ( $query->find( dirname( __FILE__ ) . '/test_classes' ) as $class ) {
             if ( $class->getName() == 'SomeClass' )
                 $this->class                   = new ezcReflectionClass( $class );
             if ( $class->getName() == 'TestWebservice' )
@@ -71,7 +70,7 @@ class ezcReflectionClassStaticTest extends ezcReflectionClassTest
         $this->classTestWebservice     = new ezcReflectionClass( $session->getClass( 'TestWebservice' ) );
         $this->classReflectionFunction = new ezcReflectionClass( $session->getClass( 'ReflectionFunction' ) );
         //$this->classReflectionFunction = new ezcReflectionClass( 'ReflectionFunction' );
-        
+
         /*/
         $query = $session->createFileQuery();
         $this->interface = $query->find( dirname( __FILE__ ) . '/test_classes/interface.php' )->current();
@@ -95,11 +94,10 @@ class ezcReflectionClassStaticTest extends ezcReflectionClassTest
     /**
      * @dataProvider getWrapperMethodsWithParameters
      */
-    public function testWrapperMethodsWithParameters( $fixtureName, $method, $arguments )
+    public function testWrapperMethodsWithParameters($fixtureName, $method, $arguments)
     {
         try {
-            if ( $method != 'setStaticPropertyValue' )
-            {
+            if ($method != 'setStaticPropertyValue') {
                 parent::testWrapperMethodsWithParameters( $fixtureName, $method, $arguments );
             }
         } catch ( ReflectionException $e ) {
@@ -112,4 +110,3 @@ class ezcReflectionClassStaticTest extends ezcReflectionClassTest
          return new PHPUnit_Framework_TestSuite( __CLASS__ );
     }
 }
-?>

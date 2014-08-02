@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,11 +27,12 @@
 
 class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
 {
-    public function setUpFixtures() {
+    public function setUpFixtures()
+    {
         // function with undocumented parameter $t that has default value 'foo'
         $function = new ReflectionFunction( 'mmm' );
 //        $this->expected['mmm'] = $function->getParameters();
-        foreach ( $this->expected['mmm'] as $key => $param ) {
+        foreach ($this->expected['mmm'] as $key => $param) {
             $this->actual['mmm'][$key] = new ezcReflectionParameter( null, $param );
         }
 
@@ -39,7 +40,7 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
 //        $this->expectedFunctionM1 = new ReflectionFunction( 'm1' );
 //        $this->expected['m1'] = $this->expectedFunctionM1->getParameters();
         $paramTypes = array( 'string', 'ezcReflection', 'ReflectionClass' );
-        foreach ( $this->expected['m1'] as $key => $param ) {
+        foreach ($this->expected['m1'] as $key => $param) {
             $this->actualParamsOfM1[] =
                 new ezcReflectionParameter( null, $param, $paramTypes[$key] );
         }
@@ -47,7 +48,7 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
         // method with one undocumented parameter
 //        $this->expectedMethod_TestMethods_m3 = new ReflectionMethod( 'TestMethods', 'm3' );
 //        $this->expected['TestMethods::m3'] = $this->expectedMethod_TestMethods_m3->getParameters();
-        foreach ( $this->expected['TestMethods::m3'] as $param ) {
+        foreach ($this->expected['TestMethods::m3'] as $param) {
             $this->actualParamsOf_TestMethods_m3[] = new ezcReflectionParameter( null, $param );
         }
 
@@ -56,7 +57,7 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
 //            = new ReflectionMethod( 'ezcReflection', 'setReflectionTypeFactory' );
 //        $this->expected['ezcReflection::setReflectionTypeFactory']
 //            = $this->expectedMethod_ezcReflection_setReflectionTypeFactory->getParameters();
-        foreach ( $this->expected['ezcReflection::setReflectionTypeFactory'] as $param ) {
+        foreach ($this->expected['ezcReflection::setReflectionTypeFactory'] as $param) {
             $this->actualParamsOf_ezcReflection_setReflectionTypeFactory[] = new ezcReflectionParameter( null, $param, 'ezcReflectionTypeFactory' );
         }
 
@@ -73,7 +74,8 @@ class ezcReflectionParameterExternalTest extends ezcReflectionParameterTest
 //        );
     }
 
-    public function testExport( $functionName = null, $paramKey = null ) {
+    public function testExport($functionName = null, $paramKey = null)
+    {
         // no need to test this again
     }
 

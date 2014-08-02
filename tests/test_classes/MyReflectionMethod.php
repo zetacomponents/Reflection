@@ -1,21 +1,24 @@
 <?php
-class MyReflectionMethod extends ReflectionMethod {
-    
+class MyReflectionMethod extends ReflectionMethod
+{
     public function doSomeMetaProgramming()
     {
-		return true;
-	}
-    
-    public function change() {
-		return true;
-	}
+        return true;
+    }
 
-	public function getDeclaringClass() {
-		return new MyReflectionClass(parent::getDeclaringClass()->getName());
-	}
+    public function change()
+    {
+        return true;
+    }
 
-	/*
-    public function getParameters() {
+    public function getDeclaringClass()
+    {
+        return new MyReflectionClass(parent::getDeclaringClass()->getName());
+    }
+
+    /*
+    public function getParameters()
+    {
     	$params = parent::getParameters();
 
     	$result = array();
@@ -25,6 +28,5 @@ class MyReflectionMethod extends ReflectionMethod {
     	return $result;
     }
     */
-    
+
 }
-?>

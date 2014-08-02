@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -47,21 +47,23 @@ class ezcReflectionObjectTypeTest extends ezcTestCase
         $this->object = new ezcReflectionObjectType( 'object' );
         $this->type                   = new ezcReflectionObjectType( 'SomeClass' );
     }
-    
-    public function testGetTypeName() {
-    	$this->assertEquals( 'SomeClass', $this->class->getTypeName() );
-    	$this->assertEquals( 'TestWebservice', $this->classTestWebservice->getTypeName() );
-      	$this->assertEquals( 'ReflectionFunction', $this->classReflectionFunction->getTypeName() );
-    	$this->assertEquals( 'stdClass', $this->stdClass->getTypeName() );
-    	$this->assertEquals( 'object', $this->object->getTypeName() );
+
+    public function testGetTypeName()
+    {
+        $this->assertEquals( 'SomeClass', $this->class->getTypeName() );
+        $this->assertEquals( 'TestWebservice', $this->classTestWebservice->getTypeName() );
+          $this->assertEquals( 'ReflectionFunction', $this->classReflectionFunction->getTypeName() );
+        $this->assertEquals( 'stdClass', $this->stdClass->getTypeName() );
+        $this->assertEquals( 'object', $this->object->getTypeName() );
     }
 
-    public function testGetClass() {
-    	$this->assertEquals( 'SomeClass', $this->class->getClass()->getName() );
-    	$this->assertEquals( 'TestWebservice', $this->classTestWebservice->getClass()->getName() );
-      	$this->assertEquals( 'ReflectionFunction', $this->classReflectionFunction->getClass()->getName() );
-    	$this->assertEquals( 'stdClass', $this->stdClass->getClass()->getName() );
-    	$this->assertEquals( 'stdClass', $this->object->getClass()->getName() );
+    public function testGetClass()
+    {
+        $this->assertEquals( 'SomeClass', $this->class->getClass()->getName() );
+        $this->assertEquals( 'TestWebservice', $this->classTestWebservice->getClass()->getName() );
+          $this->assertEquals( 'ReflectionFunction', $this->classReflectionFunction->getClass()->getName() );
+        $this->assertEquals( 'stdClass', $this->stdClass->getClass()->getName() );
+        $this->assertEquals( 'stdClass', $this->object->getClass()->getName() );
     }
 
     public function testIsArray()
@@ -133,4 +135,3 @@ class ezcReflectionObjectTypeTest extends ezcTestCase
          return new PHPUnit_Framework_TestSuite( 'ezcReflectionObjectTypeTest' );
     }
 }
-?>

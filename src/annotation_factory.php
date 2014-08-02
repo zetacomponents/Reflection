@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -34,7 +34,7 @@
 class ezcReflectionAnnotationFactory
 {
 
-	/**
+    /**
 	 * Don't allow objects, it is just a static factory
 	 */
     // @codeCoverageIgnoreStart
@@ -42,20 +42,20 @@ class ezcReflectionAnnotationFactory
     // @codeCoverageIgnoreEnd
 
     /**
-     * @param string $type
-     * @param string[] $line array of words
+     * @param  string                  $type
+     * @param  string[]                $line array of words
      * @return ezcReflectionAnnotation
      */
-    static public function createAnnotation($type, $line) {
+    public static function createAnnotation($type, $line)
+    {
         $annotationClassName = 'ezcReflectionAnnotation' . ucfirst($type);
         $annotation = null;
         if (!empty($type) and class_exists($annotationClassName)) {
             $annotation = new $annotationClassName($line);
-        }
-        else {
+        } else {
             $annotation = new ezcReflectionAnnotation($line);
         }
+
         return $annotation;
     }
 }
-?>

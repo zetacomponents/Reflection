@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,44 +32,46 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
 	 * @var ezcReflectionTypeMapper
      */
     public $fixture;
-    
+
     public function setUp()
     {
         $this->fixture = ezcReflectionTypeMapper::getInstance();
     }
-    
-    public function testIsScalarType() {
+
+    public function testIsScalarType()
+    {
         $ezcReflectionPrimitiveTypes = array('integer', 'int', 'INT', 'float', 'double',
                                 'string', 'bool', 'boolean');
         foreach ($ezcReflectionPrimitiveTypes as $type) {
-        	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isScalarType($type));
+            self::assertTrue(ezcReflectionTypeMapper::getInstance()->isScalarType($type));
         }
 
         $noneezcReflectionPrimitiveTypes = array('ReflectionClass', 'array', 'int[]',
                                     'string[]', 'NonExistingClassFooBar');
         foreach ($noneezcReflectionPrimitiveTypes as $type) {
-        	self::assertFalse(ezcReflectionTypeMapper::getInstance()->isScalarType($type));
+            self::assertFalse(ezcReflectionTypeMapper::getInstance()->isScalarType($type));
         }
     }
 
-    public function testIsArray() {
+    public function testIsArray()
+    {
         $arrayDefs = array('array', 'string[]', 'bool[]', 'ReflectionClass[]',
                            'NonExistingTypeFooBar[]');
         foreach ($arrayDefs as $type) {
-        	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
+            self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }
 
         $arrayDefs = array('array(int=>string)', 'array(string=>ReflectionClass)',
                            'array(ReflectionClass=>float)');
         foreach ($arrayDefs as $type) {
-        	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
+            self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }
 
         $noneezcReflectionArrayTypes = array('integer', 'int', 'INT', 'float', 'double',
                                 'string', 'bool', 'boolean', 'NonExistingClassFooBar',
                                 'ReflectionClass');
         foreach ($noneezcReflectionArrayTypes as $type) {
-        	self::assertFalse(ezcReflectionTypeMapper::getInstance()->isArray($type));
+            self::assertFalse(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }
 
     }
@@ -77,19 +79,22 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
     /**
      * Test ez Style arrays
      */
-    public function testIsArray2() {
+    public function testIsArray2()
+    {
         $arrayDefs = array('array(string=>float)', 'array(int=>ReflectionClass)',
                            'array(string=>array(int=>ReflectionClass))');
         foreach ($arrayDefs as $type) {
-        	self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
+            self::assertTrue(ezcReflectionTypeMapper::getInstance()->isArray($type));
         }
     }
 
-    public function testGetXmlTypeWithNonStandardTypeName() {
+    public function testGetXmlTypeWithNonStandardTypeName()
+    {
         self::assertEquals( 'int', ezcReflectionTypeMapper::getInstance()->getXmlType( 'int' ) );
     }
 
-    public function testGetXmlTypeWithNonExistingType() {
+    public function testGetXmlTypeWithNonExistingType()
+    {
         self::assertNull( ezcReflectionTypeMapper::getInstance()->getXmlType( 'NonExistingType' ) );
     }
 
@@ -112,9 +117,9 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
             array( 'array', 'array' ),
             array( 'int[]', 'array' ),
             array( 'string[]', 'array' ),
-        	array( 'ReflectionClass[]', 'array' ),
-        	array( 'array(int=>string)', 'array' ),
-        	array( 'array(string=>ReflectionClass)', 'array' ),
+            array( 'ReflectionClass[]', 'array' ),
+            array( 'array(int=>string)', 'array' ),
+            array( 'array(string=>ReflectionClass)', 'array' ),
             array( 'array(ReflectionClass=>float)', 'array' ),
             array( 'array(integer=>array(integer=>string))', 'array' ),
             array( 'array(int=>string[])', 'array' ),
@@ -123,18 +128,17 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
             array( 'callback', 'mixed' ),
         );
     }
-    
+
     /**
      * @dataProvider getTypeNames()
-     * 
-     * @param string $typeName
-     * @param string $category
+     *
+     * @param  string $typeName
+     * @param  string $category
      * @return void
      */
-    public function testTypeCategorization( $typeName, $category )
+    public function testTypeCategorization($typeName, $category)
     {
-        switch ( $category )
-        {
+        switch ($category) {
             case 'scalar':
                 self::assertTrue( $this->fixture->isScalarType( $typeName ) );
                 self::assertFalse( $this->fixture->isArray( $typeName ) );
@@ -157,10 +161,9 @@ class ezcReflectionTypeMapperTest extends ezcTestCase
                 break;
         }
     }
-    
+
     public static function suite()
     {
          return new PHPUnit_Framework_TestSuite( "ezcReflectionTypeMapperTest" );
     }
 }
-?>

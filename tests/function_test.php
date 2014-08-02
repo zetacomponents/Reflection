@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,7 @@
 
 class ezcReflectionFunctionTest extends ezcTestCase
 {
-	/**
+    /**
      * @var ReflectionFunction
      */
     protected $php_fctM1;
@@ -35,7 +35,7 @@ class ezcReflectionFunctionTest extends ezcTestCase
     protected $php_fctM3;
     protected $php_fct_method_exists;
 
-	/**
+    /**
      * @var ezcReflectionFunction
      */
     protected $fctM1;
@@ -43,7 +43,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
     protected $fctM3;
     protected $fct_method_exists;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->php_fctM1 = new ReflectionFunction('m1');
         $this->php_fctM2 = new ReflectionFunction('m2');
         $this->php_fctM3 = new ReflectionFunction('m3');
@@ -54,7 +55,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
         $this->fct_method_exists = new ezcReflectionFunction('method_exists');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         unset($this->php_fctM1);
         unset($this->php_fctM2);
         unset($this->php_fctM3);
@@ -66,17 +68,18 @@ class ezcReflectionFunctionTest extends ezcTestCase
     /**
      * @expectedException ezcReflectionCallToUndefinedMethodException
      */
-    public function testCall() {
+    public function testCall()
+    {
         $this->fctM1->undefinedMethod();
     }
 
-    public function testGetAnnotations() {
+    public function testGetAnnotations()
+    {
         $func = $this->fctM1;
         $annotations = $func->getAnnotations();
 
         $expectedAnnotations = array('webmethod', 'author', 'param', 'param', 'param', 'return');
         ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
-
 
         $func = $this->fctM2;
         $annotations = $func->getAnnotations();
@@ -84,24 +87,27 @@ class ezcReflectionFunctionTest extends ezcTestCase
         ReflectionTestHelper::expectedAnnotations($expectedAnnotations, $annotations, $this);
     }
 
-    public function testGetAnnotationsByName( $fixtureName = 'fctM1' ) {
+    public function testGetAnnotationsByName($fixtureName = 'fctM1')
+    {
         $annotationName = 'param';
         $annotations = $this->$fixtureName->getAnnotations( $annotationName );
         self::assertTrue( is_array( $annotations ) );
         self::assertEquals( 3, count( $annotations ) );
-        foreach ( $annotations as $annotation ) {
+        foreach ($annotations as $annotation) {
             $this->assertInstanceOf( 'ezcReflectionAnnotation', $annotation );
             $this->assertContains( $annotation->getName(), $annotationName );
         }
     }
 
-    public function testHasAnnotation() {
+    public function testHasAnnotation()
+    {
         $func = $this->fctM1;
         self::assertFalse($func->hasAnnotation('licence'));
         self::assertTrue($func->hasAnnotation('webmethod'));
     }
 
-    public function testGetLongDescription() {
+    public function testGetLongDescription()
+    {
         $func = $this->fctM1;
         $desc = $func->getLongDescription();
 
@@ -132,7 +138,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals($expected, $desc);
     }
 
-    public function testGetShortDescription() {
+    public function testGetShortDescription()
+    {
         $func = $this->fctM1;
         $desc = $func->getShortDescription();
         $expected = 'To check whether an annotation was used';
@@ -154,7 +161,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals($expected, $desc);
     }
 
-    public function testGetReturnDescription() {
+    public function testGetReturnDescription()
+    {
         $func = $this->fctM1;
         $desc = $func->getReturnDescription();
         self::assertEquals('Hello World', $desc);
@@ -164,7 +172,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertEquals('', $desc);
     }
 
-    public function testGetReturnType() {
+    public function testGetReturnType()
+    {
         $func = new ezcReflectionFunction('m1');
         $type = $func->getReturnType();
         self::assertInstanceOf('ezcReflectionType', $type);
@@ -174,7 +183,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertNull($func->getReturnType());
     }
 
-    public function testGetParameters() {
+    public function testGetParameters()
+    {
         $func = new ezcReflectionFunction('m1');
         $params = $func->getParameters();
 
@@ -186,7 +196,8 @@ class ezcReflectionFunctionTest extends ezcTestCase
         self::assertTrue(count($params) == 0);
     }
 
-    public function testGetCode() {
+    public function testGetCode()
+    {
         self::assertEquals( "function m1(\$test, \$test2, &\$test3) {\n    return 'Hello World';\n}\n", $this->fctM1->getCode() );
         self::assertEquals( "function m2() {\n\n}\n", $this->fctM2->getCode() );
         self::assertEquals( "function m3() {\n    static \$staticVar;\n}\n", $this->fctM3->getCode() );
@@ -198,23 +209,25 @@ class ezcReflectionFunctionTest extends ezcTestCase
         //var_export($tokens);
     }
 
-
     // the following methods do not contain additional features
     // they just call the parent method or the reflection source
 
-    public function testToString() {
+    public function testToString()
+    {
         self::assertEquals(  $this->php_fctM1->__toString(), $this->fctM1->__toString() );
         self::assertEquals( "{$this->php_fctM2}", "{$this->fctM2}" );
         self::assertEquals( (string) $this->php_fctM3, (string) $this->fctM3);
     }
 
-    public function testGetName() {
-    	self::assertEquals('m1', $this->fctM1->getName());
-    	self::assertEquals('m2', $this->fctM2->getName());
-    	self::assertEquals('m3', $this->fctM3->getName());
+    public function testGetName()
+    {
+        self::assertEquals('m1', $this->fctM1->getName());
+        self::assertEquals('m2', $this->fctM2->getName());
+        self::assertEquals('m3', $this->fctM3->getName());
     }
 
-    public function testIsInternal() {
+    public function testIsInternal()
+    {
         self::assertFalse($this->fctM1->isInternal());
         self::assertEquals(
             $this->php_fct_method_exists->isInternal(),
@@ -222,41 +235,49 @@ class ezcReflectionFunctionTest extends ezcTestCase
         );
     }
 
-    public function testIsDisabled() {
-    	self::assertFalse($this->fctM1->isDisabled());
+    public function testIsDisabled()
+    {
+        self::assertFalse($this->fctM1->isDisabled());
     }
 
-    public function testIsUserDefined() {
-    	self::assertTrue($this->fctM1->isUserDefined());
+    public function testIsUserDefined()
+    {
+        self::assertTrue($this->fctM1->isUserDefined());
     }
 
-    public function testGetFileName() {
-    	self::assertEquals('functions.php', basename($this->fctM1->getFileName()));
+    public function testGetFileName()
+    {
+        self::assertEquals('functions.php', basename($this->fctM1->getFileName()));
     }
 
-    public function testGetStartLine() {
-    	self::assertEquals(12, $this->fctM1->getStartLine());
+    public function testGetStartLine()
+    {
+        self::assertEquals(12, $this->fctM1->getStartLine());
     }
 
-    public function testGetEndLine() {
-    	self::assertEquals(14, $this->fctM1->getEndLine());
+    public function testGetEndLine()
+    {
+        self::assertEquals(14, $this->fctM1->getEndLine());
     }
 
-    public function testGetDocComment() {
-    	self::assertEquals("/**
+    public function testGetDocComment()
+    {
+        self::assertEquals("/**
  * @param void \$DocuFlaw
  * @param boolean
  * @author flaw joe
 weird coding standards should also be supported: */", $this->fctM2->getDocComment());
     }
 
-    public function testGetStaticVariables() {
-    	$vars = $this->fctM3->getStaticVariables();
-    	self::assertEquals(1, count($vars));
-    	self::assertTrue(array_key_exists('staticVar', $vars));
+    public function testGetStaticVariables()
+    {
+        $vars = $this->fctM3->getStaticVariables();
+        self::assertEquals(1, count($vars));
+        self::assertTrue(array_key_exists('staticVar', $vars));
     }
 
-    public function testInvoke() {
+    public function testInvoke()
+    {
         self::assertEquals(
             $this->php_fctM1->invoke(
                 'test',
@@ -275,7 +296,8 @@ weird coding standards should also be supported: */", $this->fctM2->getDocCommen
         );
     }
 
-    public function testInvokeArgs() {
+    public function testInvokeArgs()
+    {
         self::assertEquals(
             $this->php_fctM1->invokeArgs(
                 array(
@@ -298,42 +320,49 @@ weird coding standards should also be supported: */", $this->fctM2->getDocCommen
         );
     }
 
-    public function testReturnsReference() {
-    	self::assertFalse($this->fctM3->returnsReference());
+    public function testReturnsReference()
+    {
+        self::assertFalse($this->fctM3->returnsReference());
     }
 
-    public function testGetNumberOfParameters() {
-    	self::assertEquals(3, $this->fctM1->getNumberOfParameters());
-    	$func = new ReflectionFunction('mmm');
-    	self::assertEquals(1, $func->getNumberOfParameters());
+    public function testGetNumberOfParameters()
+    {
+        self::assertEquals(3, $this->fctM1->getNumberOfParameters());
+        $func = new ReflectionFunction('mmm');
+        self::assertEquals(1, $func->getNumberOfParameters());
     }
-    public function testGetNumberOfRequiredParameters() {
-    	self::assertEquals(3, $this->fctM1->getNumberOfRequiredParameters());
-    	$func = new ReflectionFunction('mmm');
-    	self::assertEquals(0, $func->getNumberOfRequiredParameters());
+    public function testGetNumberOfRequiredParameters()
+    {
+        self::assertEquals(3, $this->fctM1->getNumberOfRequiredParameters());
+        $func = new ReflectionFunction('mmm');
+        self::assertEquals(0, $func->getNumberOfRequiredParameters());
     }
 
-    public function testGetExtension() {
+    public function testGetExtension()
+    {
         self::assertEquals( $this->php_fctM1->getExtension(), $this->fctM1->getExtension() );
         self::assertEquals( $this->php_fctM2->getExtension(), $this->fctM2->getExtension() );
         self::assertEquals( $this->php_fctM3->getExtension(), $this->fctM3->getExtension() );
         self::assertEquals( (string) $this->php_fct_method_exists->getExtension(), (string) $this->fct_method_exists->getExtension() );
     }
 
-    public function testGetExtensionName() {
+    public function testGetExtensionName()
+    {
         self::assertEquals(  $this->php_fctM1->getExtensionName(), $this->fctM1->getExtensionName() );
         self::assertEquals(  $this->php_fctM2->getExtensionName(), $this->fctM2->getExtensionName() );
         self::assertEquals(  $this->php_fctM3->getExtensionName(), $this->fctM3->getExtensionName() );
         self::assertEquals(  $this->php_fct_method_exists->getExtensionName(), $this->fct_method_exists->getExtensionName() );
     }
 
-    public function testExport() {
+    public function testExport()
+    {
         self::assertEquals( ReflectionFunction::export( 'm1', true ), ezcReflectionFunction::export( 'm1', true ) );
         self::assertEquals( ReflectionFunction::export( 'm2', true ), ezcReflectionFunction::export( 'm2', true ) );
         self::assertEquals( ReflectionFunction::export( 'm3', true ), ezcReflectionFunction::export( 'm3', true ) );
     }
 
-    public function getWrapperMethods() {
+    public function getWrapperMethods()
+    {
         $wrapperMethods = array(
             array( '__toString', array() ),
             array( 'getName', array() ),
@@ -362,20 +391,22 @@ weird coding standards should also be supported: */", $this->fctM2->getDocCommen
         } else {
             $wrapperMethods530 = array();
         }
+
         return array_merge( $wrapperMethods, $wrapperMethods530 );
     }
 
     /**
      * @dataProvider getWrapperMethods
      */
-    public function testWrapperMethods( $method, $arguments ) {
+    public function testWrapperMethods($method, $arguments)
+    {
         $fixtureNames = array(
             'fctM1',
             'fctM2',
             'fctM3',
             'fct_method_exists',
         );
-        foreach ( $fixtureNames as $fixtureName ) {
+        foreach ($fixtureNames as $fixtureName) {
             $php_fixtureName = "php_$fixtureName";
             try {
                 $actual = call_user_func_array(
@@ -384,14 +415,14 @@ weird coding standards should also be supported: */", $this->fctM2->getDocCommen
                 $expected = call_user_func_array(
                     array( $this->$php_fixtureName, $method ), $arguments
                 );
-                if ( $expected instanceOf Reflector ) {
+                if ($expected instanceof Reflector) {
                     self::assertEquals( (string) $expected, (string) $actual );
                 } else {
                     self::assertEquals( $expected, $actual );
                 }
             } catch ( ReflectionException $e ) {
                 if ( !(
-                    $this->$php_fixtureName instanceOf ReflectionMethod
+                    $this->$php_fixtureName instanceof ReflectionMethod
                     and
                     $e->getMessage() == 'Method ' . $this->$php_fixtureName->getDeclaringClass()->getName() . '::' . $this->$php_fixtureName->getName() . ' does not have a prototype'
                 ) ) {

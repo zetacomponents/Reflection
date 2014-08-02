@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -23,7 +23,8 @@
  * @testclass
  * @ignore
  */
-class SomeClass extends BaseClass implements IInterface {
+class SomeClass extends BaseClass implements IInterface
+{
     /**
      * @var int[] An array of integers
      */
@@ -33,14 +34,15 @@ class SomeClass extends BaseClass implements IInterface {
      * @var SomeClass
      */
     public $publicProperty;
-    
+
     protected $undocumentedProperty;
 
     const CLASS_CONSTANT = 'ConstantValue';
-    
+
     public static $staticProperty = 'StaticValue';
 
-    public function __construct() {
+    public function __construct()
+    {
         // echo "New SomeClass instance created.\n";
     }
 
@@ -49,4 +51,3 @@ class SomeClass extends BaseClass implements IInterface {
         return true;
     }
 }
-?>

@@ -8,9 +8,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -27,7 +27,8 @@
 
 class ezcReflectionParametersFromFunctionTest extends ezcReflectionParameterTest
 {
-    public function setUpFixtures() {
+    public function setUpFixtures()
+    {
         // function with undocumented parameter $t that has default value 'foo'
         $function = new ezcReflectionFunction( 'mmm' );
         $this->actual['mmm'] = $function->getParameters();
@@ -78,7 +79,8 @@ class ezcReflectionParametersFromFunctionTest extends ezcReflectionParameterTest
         );
     }
 
-    public function testExport( $functionName = null, $paramKey = null ) {
+    public function testExport($functionName = null, $paramKey = null)
+    {
         // no need to test this again
     }
 
@@ -87,4 +89,3 @@ class ezcReflectionParametersFromFunctionTest extends ezcReflectionParameterTest
          return new PHPUnit_Framework_TestSuite( "ezcReflectionParametersFromFunctionTest" );
     }
 }
-?>

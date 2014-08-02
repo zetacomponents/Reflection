@@ -9,9 +9,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -38,7 +38,8 @@
  * @version //autogen//
  * @author Stefan Marr <mail@stefan-marr.de>
  */
-class ezcReflectionAnnotation {
+class ezcReflectionAnnotation
+{
     /**
     * @var string
     */
@@ -54,26 +55,23 @@ class ezcReflectionAnnotation {
     */
     protected $desc;
 
-
     /**
     * @param string[] $line Array of words
     */
-    public function __construct($line) {
+    public function __construct($line)
+    {
         $this->annotationName = $line[0];
 
         if (count($line) == 4) {
             $this->params[] = $line[1];
             $this->params[] = $line[2];
             $this->desc = $line[3];
-        }
-        elseif (count($line) == 3) {
+        } elseif (count($line) == 3) {
             $this->params[] = $line[1];
             $this->desc = $line[2];
-        }
-        elseif (count($line) == 2) {
+        } elseif (count($line) == 2) {
             $this->params[] = $line[1];
-        }
-        else {
+        } else {
             $this->params = $line;
         }
     }
@@ -81,29 +79,32 @@ class ezcReflectionAnnotation {
     /**
     * @return string
     */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->desc;
     }
 
     /**
     * @param string $line
     */
-    public function addDescriptionLine($line) {
+    public function addDescriptionLine($line)
+    {
         $this->desc .= "\n".$line;
     }
 
     /**
     * @return string
     */
-    public function getName() {
+    public function getName()
+    {
         return $this->annotationName;
     }
 
     /**
     * @return string[]
     */
-    public function getParams() {
+    public function getParams()
+    {
         return $this->params;
     }
 }
-?>
